@@ -7,7 +7,7 @@ let Vertifier = function(imageUrl, callback){
 	let vertexGeom = new THREE.Geometry(),
 		vertexMaterial = new THREE.PointsMaterial({
 			color: 0xFFFFFF,
-			size: 5,
+			size: 5 * window.devicePixelRatio,
 			sizeAttenuation: false,
 			vertexColors: THREE.VertexColors
 		});
