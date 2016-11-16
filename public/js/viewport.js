@@ -24,6 +24,7 @@ Vue.component(
 );
 
 let viewportList = [];
+let viewport;
 let Viewport = function(canvas, vueComponentInstance){
 	let p = this;
 	p.width = 0;
@@ -42,10 +43,10 @@ let Viewport = function(canvas, vueComponentInstance){
 	p.ambientLight = new THREE.AmbientLight(0xffffff);
 	p.scene.add(p.ambientLight);
 
-	p.cubeScale = 10;
-	p.cubeGeom = new THREE.BoxGeometry(p.cubeScale, p.cubeScale, p.cubeScale);
+	p.cubeGeom = new THREE.BoxGeometry(1, 1, 1);
 	p.cubeMaterial = new THREE.MeshNormalMaterial();
 	p.cube = new THREE.Mesh(p.cubeGeom, p.cubeMaterial);
+	p.cube.scale.setScalar(10);
 	p.scene.add(p.cube);
 
 	p.grid = new THREE.GridHelper( 200, 20 );
@@ -57,6 +58,7 @@ let Viewport = function(canvas, vueComponentInstance){
 
 	p.sizeWindow();
 	viewportList.push(p);
+	viewport = p;
 };
 
 Viewport.prototype = {

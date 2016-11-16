@@ -21,7 +21,7 @@ var app = new Vue({
 						<div class="card">
 							<div class="card-header">Sidebar</div>
 							<div class="card-block">
-
+								<img src="img/rainbowspace_logo-512.png" class="w-100">
 								<h4 class="card-title">Settings Title</h4>
 								<p class="card-text">hell yeah this is where settings live</p>
 								<hr />
