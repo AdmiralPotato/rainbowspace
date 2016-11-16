@@ -34,18 +34,59 @@ body{
 	color: #ccc;
 }
 .main{
+	padding: 0;
 }
 .sidebar{
+	position: absolute;
 	background-color: #666;
 	color: #333;
 	padding: 1rem;
 }
-.noPad{
-	padding: 0;
-}
-
 .viewport{
 	display: block;
 	width: 100%;
 	height: 100%;
 }
+
+.settingsToggle{
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: 1.5rem;
+	z-index: 1;
+}
+
+.icon{
+	display: inline-block;
+	height: 2rem;
+	width: 2rem;
+	line-height: 2rem;
+	text-align: center;
+	font-size: 1.5rem;
+	border: 2px solid #999;
+	border-radius: 0.5rem;
+}
+.icon.fa:before{
+	display: block;
+	line-height: 1.74rem;
+	color: #999;
+}
+
+/*// Small devices (landscape phones, 544px and up)*/
+@media (min-width: 544px) {}
+
+/*// Medium devices (tablets, 768px and up)*/
+@media (min-width: 768px) {
+	.sidebar{
+		position: relative;
+		overflow-y: auto;
+		overflow-x: hidden;
+		max-height: 100%;
+	}
+}
+
+/*// Large devices (desktops, 992px and up)*/
+@media (min-width: 992px) {}
+
+/*// Extra large devices (large desktops, 1200px and up)*/
+@media (min-width: 1200px) {}
