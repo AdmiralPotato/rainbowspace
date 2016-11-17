@@ -1,3 +1,5 @@
+let loadedImageMap = {};
+
 let Vertifier = function (args) {
 	let t = this;
 	t.imageUrl = args.imageUrl || console.break('MISSING IMAGE URL');
@@ -23,47 +25,54 @@ let Vertifier = function (args) {
 Vertifier.prototype = {
 	loadImage: function(imageUrl){
 		let t = this;
-		t.imageUrl = imageUrl || t.imageUrl;
-		t.loader.load(
-			t.imageUrl,
-			function (texture) {
-				console.log(texture);
-				t.loadSuccess(texture);
-			},
-			t.loadProgress,
-			t.loadFailure
-		);
+		let imageKey = t.imageUrl = imageUrl || t.imageUrl; //TODO: brain better later. force lexical capturing now.
+		let image = loadedImageMap[imageKey];
+		if(image){
+			console.log('Vertifier.loadImage: using already loaded ' + imageKey);
+			t.loadSuccess(image);
+		} else {
+			t.loader.load(
+				imageKey,
+				function (texture) {
+					console.log('Vertifier.loadImage: finished loading ' + imageKey);
+					loadedImageMap[imageKey] = texture.image;
+					t.loadSuccess(texture.image);
+				},
+				t.loadProgress,
+				t.loadFailure
+			);
+		}
 	},
-	loadSuccess: function (texture) {
+	loadSuccess: function (image) {
 		let t = this;
 		t.dataCanvasContext = t.dataCanvas.getContext('2d');
-		t.width = texture.image.width * t.sampleMultiplier;
-		t.height = texture.image.height * t.sampleMultiplier;
+		t.width = image.width * t.sampleMultiplier;
+		t.height = image.height * t.sampleMultiplier;
 		t.dataCanvas.width = t.width;
 		t.dataCanvas.height = t.height;
 		t.dataCanvasContext.clearRect(0, 0, t.width, t.height); //clearing the canvas, in case anything is left from an image with the same size loading in.
-		t.dataCanvasContext.drawImage(texture.image, 0, 0, t.width, t.height);
+		t.dataCanvasContext.drawImage(image, 0, 0, t.width, t.height);
 		t.data = t.dataCanvasContext.getImageData(0, 0, t.width, t.height).data;
 
-		let duplicateMap = {};
+		let duplicateColorMap = {};
 		let colors = [];
 		let color;
 		let rgbString;
 		let offset;
 		let r, g, b, a;
 		let numPixels = t.width * t.height;
-		for (var i = 0; i < numPixels; i++) {
+		for (let i = 0; i < numPixels; i++) {
 			offset = i * 4;
 			r = this.data[offset];
 			g = this.data[offset + 1];
 			b = this.data[offset + 2];
 			a = this.data[offset + 3];
 			rgbString = 'rgba(' + r + ',' + g + ',' + b + ')';
-			if (!duplicateMap[rgbString] && a > 192) {
+			if (!duplicateColorMap[rgbString] && a > 192) {
 				color = new THREE.Color(rgbString);
 				colors.push(color);
 			}
-			duplicateMap[rgbString] = true;
+			duplicateColorMap[rgbString] = true;
 		}
 		t.vertexGeom.colors = colors;
 		t.vertexGeom.colorsNeedUpdate = true;

@@ -74,7 +74,7 @@ Vue.component(
 			<div class="form-group">
 				<label :for="id">{{ label }}</label>
 				<select :id="id" v-model="internalValue" class="form-control" v-on:change="change">
-					<option v-for="option in list" v-bind:value="option">{{ option }}</option>
+					<option v-for="option in list" v-bind:value="option.value || option">{{ option.text || option }}</option>
 				</select>
 			</div>
 		`
