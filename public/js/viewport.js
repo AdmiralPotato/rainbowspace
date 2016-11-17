@@ -30,7 +30,7 @@ let Viewport = function(canvas, vueComponentInstance){
 	p.width = 0;
 	p.height = 0;
 	p.scene = new THREE.Scene();
-	p.camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+	p.camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
 	p.camera.position.z = 25;
 	p.renderer = new THREE.WebGLRenderer({
 		canvas: canvas,
@@ -47,7 +47,17 @@ let Viewport = function(canvas, vueComponentInstance){
 	p.cubeMaterial = new THREE.MeshNormalMaterial();
 	p.cube = new THREE.Mesh(p.cubeGeom, p.cubeMaterial);
 	p.cube.scale.setScalar(10);
+	p.cube.material.wireframe = true;
 	p.scene.add(p.cube);
+
+	p.vertifier = new Vertifier({
+		imageUrl: 'img/rainbowspace_logo-512.png',
+		callback: function(){
+			//not quite sure why this doesn't work unless I add it after the image load
+			p.cube.remove(p.vertifier.particleSystem);
+			p.cube.add(p.vertifier.particleSystem);
+		}
+	});
 
 	p.grid = new THREE.GridHelper( 200, 20 );
 	p.grid.position.y = -50;
