@@ -74,9 +74,14 @@ Vertifier.prototype = {
 			}
 			duplicateColorMap[rgbString] = true;
 		}
+		//Do not recycle Geometry by re-populating them with arrays of different length!
+		//Geometry creates an inner BufferGeometry which only grows! This means leftovers sometimes!
+		t.vertexGeom.dispose();
+		t.vertexGeom = new THREE.Geometry();
 		t.vertexGeom.colors = colors;
 		t.vertexGeom.colorsNeedUpdate = true;
 		t.mapColorsToVerts();
+		t.particleSystem.geometry = t.vertexGeom;
 		t.callback(t);
 	},
 	loadProgress: function (xhr) {
