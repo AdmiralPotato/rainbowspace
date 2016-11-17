@@ -42,6 +42,10 @@ body{
 	color: #333;
 	padding: 1rem;
 }
+.dataCanvas{
+	display: block;
+	width: 100%;
+}
 .viewport{
 	display: block;
 	width: 100%;

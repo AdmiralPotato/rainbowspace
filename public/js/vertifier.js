@@ -1,7 +1,8 @@
 let Vertifier = function (args) {
 	let t = this;
 	t.imageUrl = args.imageUrl || console.break('MISSING IMAGE URL');
-	t.callback = args.callback || console.break('MISSING CALLBACK')
+	t.callback = args.callback || console.break('MISSING CALLBACK');
+	t.dataCanvas = args.dataCanvas || document.createElement('canvas');
 	t.sampleMultiplier = args.sampleMultiplier || 1;
 	t.mapMethodName = args.mapMethodName || 'xyz';
 
@@ -35,15 +36,12 @@ Vertifier.prototype = {
 	},
 	loadSuccess: function (texture) {
 		let t = this;
-		t.dataCanvas = document.createElement('canvas');
 		t.dataCanvasContext = t.dataCanvas.getContext('2d');
 		t.width = texture.image.width * t.sampleMultiplier;
 		t.height = texture.image.height * t.sampleMultiplier;
 		t.dataCanvas.width = t.width;
 		t.dataCanvas.height = t.height;
 		t.dataCanvasContext.clearRect(0, 0, t.width, t.height); //clearing the canvas, in case anything is left from an image with the same size loading in.
-		t.dataCanvas.style.width = t.width + 'px';
-		t.dataCanvas.style.height = t.height + 'px';
 		t.dataCanvasContext.drawImage(texture.image, 0, 0, t.width, t.height);
 		t.data = t.dataCanvasContext.getImageData(0, 0, t.width, t.height).data;
 

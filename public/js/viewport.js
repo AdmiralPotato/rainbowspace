@@ -30,8 +30,11 @@ let Viewport = function(canvas, vueComponentInstance){
 	p.width = 0;
 	p.height = 0;
 	p.scene = new THREE.Scene();
-	p.camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
-	p.camera.position.z = 25;
+	p.cameraMap = {
+		perspective: new THREE.PerspectiveCamera(45, 1, 0.1, 1000),
+		orthographic: new THREE.OrthographicCamera(0, 0, 0, 0, 0, 1000),
+	};
+	p.camera = null;
 	p.renderer = new THREE.WebGLRenderer({
 		canvas: canvas,
 		antialias: true,
@@ -51,12 +54,13 @@ let Viewport = function(canvas, vueComponentInstance){
 	p.scene.add(p.cube);
 
 	p.vertifier = new Vertifier({
-		imageUrl: 'img/rainbowspace_logo-512.png',
+		imageUrl: settings.image,
 		callback: function(){
 			//not quite sure why this doesn't work unless I add it after the image load
 			p.cube.remove(p.vertifier.particleSystem);
 			p.cube.add(p.vertifier.particleSystem);
-		}
+		},
+		dataCanvas: dataCanvas
 	});
 
 	p.grid = new THREE.GridHelper( 200, 20 );
@@ -79,8 +83,19 @@ Viewport.prototype = {
 		p.height = p.canvas.clientHeight * ratio;
 		p.vue.width = p.width;
 		p.vue.height = p.height;
-		p.camera.aspect = p.width / p.height;
-		p.camera.updateProjectionMatrix();
+
+		p.cameraMap.perspective.aspect = p.width / p.height;
+		p.cameraMap.perspective.updateProjectionMatrix();
+
+		p.orthographicMultiplier = 1 / 64;
+		let oWidth = p.width * p.orthographicMultiplier;
+		let oHeight = p.height * p.orthographicMultiplier;
+		p.cameraMap.orthographic.right  =  oWidth;
+		p.cameraMap.orthographic.left   = -oWidth;
+		p.cameraMap.orthographic.top    =  oHeight;
+		p.cameraMap.orthographic.bottom = -oHeight;
+		p.cameraMap.orthographic.updateProjectionMatrix();
+
 		//p.renderer.setPixelRatio(ratio);
 		p.renderer.setViewport(0, 0, p.width, p.height);
 	},
@@ -88,6 +103,15 @@ Viewport.prototype = {
 		let p = this;
 		p.cube.rotation.x += 0.005;
 		p.cube.rotation.y += 0.01;
+
+		p.camera = p.cameraMap[settings.cameraMode];
+		p.camera.position.z = 25;
+		if(p.vertifier.imageUrl !== settings.image){
+			p.vertifier.loadImage(settings.image);
+		}
+		if(p.vertifier.mapMethodName !== settings.displayMethod){
+			p.vertifier.mapColorsToVerts(settings.displayMethod);
+		}
 		p.renderer.render(p.scene, p.camera);
 	}
 };
