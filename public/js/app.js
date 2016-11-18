@@ -14,6 +14,15 @@ let settings = {
 		{text: 'Aperture Eyes', value: 'http://i.imgur.com/un151Ttl.jpg'},
 		{text: 'Warm Wooden Toy', value: 'http://i.imgur.com/4mUs55cl.jpg'},
 		{text: 'Recursive Trefoil Knot', value: 'http://i.imgur.com/3kasZkCl.jpg'},
+		{text: 'Some Cool Color Chart', value: 'http://i.imgur.com/Mv7BbPWl.jpg'},
+		{text: 'Another Cool Color Chart', value: 'https://c1.staticflickr.com/5/4149/5077374515_c740c2f199_b.jpg'},
+		{text: 'Yet Another Cool Color Chart', value: 'https://c1.staticflickr.com/7/6080/6109196872_61ea600625_z.jpg'},
+		{text: 'aCool Color Chart', value: 'https://c2.staticflickr.com/6/5059/5500526444_baf6909eef_z.jpg'},
+		{text: 'bCool Color Chart', value: 'https://c2.staticflickr.com/2/1563/26702317155_e3c3a9dd71_z.jpg'},
+		{text: 'cCool Color Chart', value: 'https://c2.staticflickr.com/4/3065/2924345262_24dc9d632a_z.jpg?zz=1'},
+		{text: 'DemonPuppy', value: 'https://crossorigin.me/https://github.com/AdmiralPotato/npos3d/raw/master/tests/pn3_files/demonpuppy.png'},
+		{text: 'InterSphere', value: 'https://crossorigin.me/http://nuclearpixel.com/js/npos3d/tests/img/intersphere.png'},
+		{text: 'hsl?', value: 'https://crossorigin.me/http://codropspz.tympanus.netdna-cdn.com/codrops/wp-content/uploads/2015/01/hsl-color-wheel.png'},
 	],
 	displayMethod: 'hslSphere',
 	displayMethodList: ['hslCylinder', 'hslCones', 'hslSphere', 'xyz'],
@@ -39,10 +48,10 @@ let app = new Vue({
 		<div class="h-100 container-fluid">
 			<div class="h-100 row">
 				<div class="settingsToggle"><a class="icon fa fa-bars" @click="settingsToggle"></a></div>
-				<div class="h-100 col-xs-12 main" :class="{'col-md-8': showSidebar}">
+				<div class="h-100 col-xs-12 main" :class="{'col-sm-8': showSidebar}">
 					<viewport />
 				</div>
-				<div class="h-100 col-xs-12 noPad sidebar" :class="{'col-md-4': showSidebar}" v-if="showSidebar">
+				<div class="h-100 col-xs-12 noPad sidebar" :class="{'col-sm-4': showSidebar}" v-if="showSidebar">
 					<div class="h-100">
 						<settings :settings="settings" :dataCanvas="dataCanvas"></settings>
 					</div>

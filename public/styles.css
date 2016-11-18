@@ -41,6 +41,8 @@ body{
 	background-color: #666;
 	color: #333;
 	padding: 1rem;
+	height: auto !important;
+	min-height: 100%;
 }
 .dataCanvas{
 	display: block;
@@ -73,15 +75,13 @@ body{
 }
 .icon.fa:before{
 	display: block;
-	line-height: 1.74rem;
+	line-height: 1.75rem;
+	vertical-align: top;
 	color: #999;
 }
 
 /*// Small devices (landscape phones, 544px and up)*/
-@media (min-width: 544px) {}
-
-/*// Medium devices (tablets, 768px and up)*/
-@media (min-width: 768px) {
+@media (min-width: 544px) {
 	.sidebar{
 		position: relative;
 		overflow-y: auto;
@@ -89,6 +89,9 @@ body{
 		max-height: 100%;
 	}
 }
+
+/*// Medium devices (tablets, 768px and up)*/
+@media (min-width: 768px) {}
 
 /*// Large devices (desktops, 992px and up)*/
 @media (min-width: 992px) {}
