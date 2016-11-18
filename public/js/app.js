@@ -1,4 +1,5 @@
 let settings = {
+	autoRotate: true,
 	image: 'img/rainbowspace_logo-512.png',
 	imageList: [
 		{text: 'RainbowSpace logo', value: 'img/rainbowspace_logo-512.png'},
@@ -14,8 +15,8 @@ let settings = {
 		{text: 'Warm Wooden Toy', value: 'http://i.imgur.com/4mUs55cl.jpg'},
 		{text: 'Recursive Trefoil Knot', value: 'http://i.imgur.com/3kasZkCl.jpg'},
 	],
-	displayMethod: 'hsl',
-	displayMethodList: ['hsl', 'xyz'],
+	displayMethod: 'hslSphere',
+	displayMethodList: ['hslCylinder', 'hslCones', 'hslSphere', 'xyz'],
 	cameraMode: 'perspective',
 	cameraModeList: ['perspective', 'orthographic']
 };

@@ -104,13 +104,31 @@ Vertifier.prototype = {
 				color.b - 0.5
 			);
 		},
-		hsl: function (color) {
+		hslCylinder: function (color) {
 			let hsl = color.getHSL();
 			let angle = hsl.h * Math.PI * 2;
 			let x = Math.cos(angle) * hsl.s * 0.5;
 			let y = hsl.l - 0.5;
 			let z = Math.sin(angle) * hsl.s * 0.5;
 			return new THREE.Vector3(x, y, z);
-		}
+		},
+		hslCones: function (color) {
+			let hsl = color.getHSL();
+			let angle = hsl.h * Math.PI * 2;
+			let radius = 1 - (Math.abs(hsl.l - 0.5) * 2);
+			let x = Math.cos(angle) * hsl.s * 0.5 * radius;
+			let y = hsl.l - 0.5;
+			let z = Math.sin(angle) * hsl.s * 0.5 * radius;
+			return new THREE.Vector3(x, y, z);
+		},
+		hslSphere: function (color) {
+			let hsl = color.getHSL();
+			let angle = hsl.h * Math.PI * 2;
+			let radius = Math.sin(hsl.l * Math.PI);
+			let x = Math.cos(angle) * hsl.s * 0.5 * radius;
+			let y = Math.cos(hsl.l * Math.PI) * -0.5;
+			let z = Math.sin(angle) * hsl.s * 0.5 * radius;
+			return new THREE.Vector3(x, y, z);
+		},
 	},
 };
