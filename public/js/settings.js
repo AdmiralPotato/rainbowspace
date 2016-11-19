@@ -70,6 +70,11 @@ Vue.component(
 				monoDirectional(this.destinationAddress, this.internalValue);
 			}
 		},
+		watch: {
+			value: function (newValue) {
+				this.internalValue = newValue;
+			}
+		},
 		template: `
 			<div class="form-group">
 				<label :for="id">{{ label }}</label>
