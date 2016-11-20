@@ -1,5 +1,6 @@
 let settings = {
-	autoRotate: true,
+	autoRotateY: true,
+	autoRotateX: true,
 	image: 'img/rainbowspace_logo-512.png',
 	imageList: [
 		{text: 'RainbowSpace logo', value: 'img/rainbowspace_logo-512.png'},

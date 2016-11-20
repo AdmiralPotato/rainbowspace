@@ -11,24 +11,38 @@ Vue.component(
 				<div class="card-block"><existingDomNode :content="dataCanvas" /></div>
 				<div class="card-block">
 					<form>
-						<strapSelect
+						<bSelect
 							label="Image"
 							:list="settings.imageList"
 							:value="settings.image"
 							destinationAddress="image"
 							/>
-						<strapSelect
+						<bSelect
 							label="Display Method"
 							:list="settings.displayMethodList"
 							:value="settings.displayMethod"
 							destinationAddress="displayMethod"
 							/>
-						<strapSelect
+						<bSelect
 							label="Camera Mode"
 							:list="settings.cameraModeList"
 							:value="settings.cameraMode"
 							destinationAddress="cameraMode"
 							/>
+						<div class="row">
+							<bCheck
+								class="col-xs-6"
+								label="Auto Rotate Y"
+								:value="settings.autoRotateY"
+								destinationAddress="autoRotateY"
+								/>
+							<bCheck
+								class="col-xs-6"
+								label="Auto Rotate X"
+								:value="settings.autoRotateX"
+								destinationAddress="autoRotateX"
+								/>
+						</div>
 					</form>
 				</div>
 			</div>
@@ -50,37 +64,72 @@ Vue.component(
 	}
 );
 
+let inputMixin = {
+	data: function(){
+		return {
+			id: 'inputUnique-' + this._uid,
+			internalValue: this.value
+		}
+	},
+	props: {
+		label: String,
+		value: String,
+		destinationAddress: String
+	},
+	methods: {
+		change: function(){
+			monoDirectional(this.destinationAddress, this.internalValue);
+		}
+	},
+	watch: {
+		value: function (newValue) {
+			this.internalValue = newValue;
+		}
+	},
+};
+
 Vue.component(
-	'strapSelect',
+	'bSelect',
 	{
-		data: function(){
-			return {
-				id: 'strapSelect-' + this._uid,
-				internalValue: this.value
-			}
-		},
+		mixins: [inputMixin],
 		props: {
 			list: Array,
-			label: String,
-			value: String,
-			destinationAddress: String
-		},
-		methods: {
-			change: function(){
-				monoDirectional(this.destinationAddress, this.internalValue);
-			}
-		},
-		watch: {
-			value: function (newValue) {
-				this.internalValue = newValue;
-			}
 		},
 		template: `
 			<div class="form-group">
 				<label :for="id">{{ label }}</label>
-				<select :id="id" v-model="internalValue" class="form-control" v-on:change="change">
+				<select
+					class="form-control"
+					:id="id"
+					v-model="internalValue"
+					v-on:change="change"
+					>
 					<option v-for="option in list" v-bind:value="option.value || option">{{ option.text || option }}</option>
 				</select>
+			</div>
+		`
+	}
+);
+
+Vue.component(
+	'bCheck',
+	{
+		props: {
+			value: Boolean
+		},
+		mixins: [inputMixin],
+		template: `
+			<div class="form-check">
+				<label class="form-check-label">
+				<input
+					type="checkbox"
+					class="form-check-input"
+					:id="id"
+					v-model="internalValue"
+					v-on:change="change"
+					/>
+				{{ label }}
+				</label>
 			</div>
 		`
 	}

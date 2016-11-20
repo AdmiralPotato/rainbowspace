@@ -31,7 +31,8 @@ Vue.component(
 					}
 					this.viewport.dragStart(x, y);
 				}
-				settings.autoRotate = false;
+				settings.autoRotateY = false;
+				settings.autoRotateX = false;
 			},
 			stop: function (event) {
 				event.preventDefault();
@@ -150,10 +151,8 @@ Viewport.prototype = {
 	render: function (time) {
 		let p = this;
 		let ratio = window.devicePixelRatio || 1;
-		if(settings.autoRotate) {
-			p.cube.rotation.y += 0.005;
-			p.cube.rotation.x += 0.001;
-		}
+		if(settings.autoRotateY) {p.cube.rotation.y += 0.005;}
+		if(settings.autoRotateX) {p.cube.rotation.x += 0.005;}
 		if(p.dragging){
 			p.cube.rotation.x += p.dragDiff.y * -0.01;
 			p.cube.rotation.y += p.dragDiff.x * -0.01;
