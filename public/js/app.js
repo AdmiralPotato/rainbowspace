@@ -1,9 +1,10 @@
 let settings = {
 	autoRotateY: true,
 	autoRotateX: true,
-	image: 'img/rainbowspace_logo-512.png',
+	image: 'img/logo-hue-stepped-0001.png',
 	imageList: [
-		{text: 'RainbowSpace logo', value: 'img/rainbowspace_logo-512.png'},
+		{text: 'RainbowSpace rendered logo', value: 'img/logo-hue-stepped-0001.png'},
+		{text: 'RainbowSpace pained logo', value: 'img/rainbowspace_logo-512.png'},
 		{text: 'Triangle - Cyan, Magenta, Yellow', value: 'img/triangle-cmy-512.png'},
 		{text: 'Triangle - Red, Yellow, Blue', value: 'img/triangle-ryb-512.png'},
 		{text: 'Ghost & Candy Corn', value: 'http://i.imgur.com/sdEo3fXl.jpg'},
@@ -28,7 +29,9 @@ let settings = {
 	displayMethod: 'hslSphere',
 	displayMethodList: ['hslCylinder', 'hslCones', 'hslSphere', 'xyz'],
 	cameraMode: 'perspective',
-	cameraModeList: ['perspective', 'orthographic']
+	cameraModeList: ['perspective', 'orthographic'],
+	cameraPosition: 'free',
+	cameraPositionList: ['Top', 'Right', 'Front', 'Corner']
 };
 let dataCanvas = document.createElement('canvas');
 dataCanvas.className = 'dataCanvas';

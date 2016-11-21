@@ -23,6 +23,7 @@ Vue.component(
 							:value="settings.displayMethod"
 							destinationAddress="displayMethod"
 							/>
+						<hr />
 						<bSelect
 							label="Camera Mode"
 							:list="settings.cameraModeList"
@@ -42,6 +43,9 @@ Vue.component(
 								:value="settings.autoRotateX"
 								destinationAddress="autoRotateX"
 								/>
+						</div>
+						<div class="row" role="group">
+							<cameraButton v-for="item in settings.cameraPositionList" :label="item" />
 						</div>
 					</form>
 				</div>
@@ -131,6 +135,42 @@ Vue.component(
 				{{ label }}
 				</label>
 			</div>
+		`
+	}
+);
+
+Vue.component(
+	'cameraButton',
+	{
+		data: function(){
+			return {
+				name: this.label.toLocaleLowerCase()
+			}
+		},
+		props: {
+			label: String
+		},
+		computed: {
+			classObject: function () {
+				let active = settings.cameraPosition === this.name;
+				return {
+					'btn-primary': active,
+					'btn-secondary': !active,
+				}
+			}
+		},
+		methods: {
+			setCameraMode: function () {
+				settings.cameraPosition = this.name;
+			}
+		},
+		template: `
+			<button
+				type="button"
+				class="btn col-xs-6 col-lg-3"
+				:class="classObject"
+				v-on:click="setCameraMode"
+				>{{label}}</button>
 		`
 	}
 );

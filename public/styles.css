@@ -80,6 +80,16 @@ body{
 	color: #999;
 }
 
+.form-group label,
+.form-check label {
+	user-select: none;
+}
+
+.row > .btn{
+	padding-left: 0;
+	padding-right: 0;
+}
+
 /*// Small devices (landscape phones, 544px and up)*/
 @media (min-width: 544px) {
 	.sidebar{

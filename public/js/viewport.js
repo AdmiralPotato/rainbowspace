@@ -9,7 +9,13 @@ Vue.component(
 			};
 		},
 		mounted: function(){
+			let vuePort = this;
 			this.viewport = new Viewport(this.$el, this);
+			this.scrollListener = function(event){
+				console.log(event);
+				vuePort.viewport.scroll(event.deltaX * 0.001 + event.deltaY * 0.01);
+			};
+			this.$el.addEventListener('wheel', this.scrollListener);
 		},
 		beforeMount: function () {
 			document.addEventListener('resize', resizeWindowEventHandler);
@@ -18,6 +24,7 @@ Vue.component(
 		beforeDestroy: function () {
 			document.removeEventListener('resize', resizeWindowEventHandler);
 			window.removeEventListener('resize', resizeWindowEventHandler);
+			this.$el.removeEventListener('wheel', this.scrollListener);
 		},
 		methods: {
 			start: function (event) {
@@ -83,7 +90,9 @@ let Viewport = function(canvas, vueComponentInstance){
 		perspective: new THREE.PerspectiveCamera(45, 1, 0.1, 1000),
 		orthographic: new THREE.OrthographicCamera(0, 0, 0, 0, 0, 1000),
 	};
+	p.cameraMap.perspective.position.z = 25;
 	p.camera = null;
+	p.cameraPosition = settings.cameraPosition;
 	p.renderer = new THREE.WebGLRenderer({
 		canvas: canvas,
 		antialias: true,
@@ -125,6 +134,12 @@ let Viewport = function(canvas, vueComponentInstance){
 };
 
 Viewport.prototype = {
+	cameraPositionMap: {
+		top:    [      Math.PI / 2,            0, 0 ],
+		right:  [                0, -Math.PI / 2, 0 ],
+		front:  [                0,            0, 0 ],
+		corner: [ Math.PI / 5.1043, -Math.PI / 4, 0 ]
+	},
 	sizeWindow: function () {
 		let p = this;
 		let ratio = window.devicePixelRatio || 1;
@@ -150,9 +165,14 @@ Viewport.prototype = {
 	},
 	render: function (time) {
 		let p = this;
-		let ratio = window.devicePixelRatio || 1;
 		if(settings.autoRotateY) {p.cube.rotation.y += 0.005;}
 		if(settings.autoRotateX) {p.cube.rotation.x += 0.005;}
+		if(settings.cameraPosition !== 'free' && settings.cameraPosition !== p.cameraPosition){
+			settings.autoRotateY = false;
+			settings.autoRotateX = false;
+			p.cameraPosition = settings.cameraPosition;
+			p.cube.rotation.fromArray(p.cameraPositionMap[p.cameraPosition]);
+		}
 		if(p.dragging){
 			p.cube.rotation.x += p.dragDiff.y * -0.01;
 			p.cube.rotation.y += p.dragDiff.x * -0.01;
@@ -160,7 +180,6 @@ Viewport.prototype = {
 		}
 
 		p.camera = p.cameraMap[settings.cameraMode];
-		p.camera.position.z = 25;
 		if(p.vertifier.imageUrl !== settings.image){
 			p.vertifier.loadImage(settings.image);
 		}
@@ -173,6 +192,7 @@ Viewport.prototype = {
 		let p = this;
 		p.dragging = true;
 		p.dragPosLast.set(x, y);
+		p.cameraPosition = settings.cameraPosition = 'free';
 	},
 	dragMove: function(x, y){
 		let p = this;
@@ -184,6 +204,9 @@ Viewport.prototype = {
 		let p = this;
 		p.dragging = false;
 		p.dragDiff.set(0, 0);
+	},
+	scroll: function(num){
+		this.camera.position.z += num;
 	}
 };
 
