@@ -130,5 +130,13 @@ Vertifier.prototype = {
 			let z = Math.sin(angle) * hsl.s * 0.5 * radius;
 			return new THREE.Vector3(x, y, z);
 		},
+		hslCube: function (color) {
+			let hsl = color.getHSL();
+			return new THREE.Vector3(
+				hsl.h - 0.5,
+				hsl.s - 0.5,
+				hsl.l - 0.5
+			);
+		},
 	},
 };

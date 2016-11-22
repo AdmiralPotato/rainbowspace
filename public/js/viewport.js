@@ -12,7 +12,6 @@ Vue.component(
 			let vuePort = this;
 			this.viewport = new Viewport(this.$el, this);
 			this.scrollListener = function(event){
-				console.log(event);
 				vuePort.viewport.scroll(event.deltaX * 0.001 + event.deltaY * 0.01);
 			};
 			this.$el.addEventListener('wheel', this.scrollListener);
