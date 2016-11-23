@@ -1,4 +1,5 @@
 let loadedImageMap = {};
+let loadedGeomMap = {};
 
 let Vertifier = function (args) {
 	let t = this;
@@ -27,46 +28,56 @@ Vertifier.prototype = {
 		let t = this;
 		let imageKey = t.imageUrl = imageUrl || t.imageUrl; //TODO: brain better later. force lexical capturing now.
 		let image = loadedImageMap[imageKey];
-		if(image){
+		let geometry = loadedGeomMap[imageKey];
+		if(image && geometry){
 			console.log('Vertifier.loadImage: using already loaded ' + imageKey);
-			t.loadSuccess(image);
+			t.swapGeometry(geometry);
 		} else {
 			t.loader.load(
 				imageKey,
 				function (texture) {
 					console.log('Vertifier.loadImage: finished loading ' + imageKey);
-					loadedImageMap[imageKey] = texture.image;
-					t.loadSuccess(texture.image);
+					image = loadedImageMap[imageKey] = texture.image;
+					geometry = loadedGeomMap[imageKey] = t.makeGeometryFromImage(image);
+					t.swapGeometry(geometry);
 				},
 				t.loadProgress,
 				t.loadFailure
 			);
 		}
 	},
-	loadSuccess: function (image) {
+	imageSourceToCanvas: function (source, canvas, x, y){
+		let width = x || source.width;
+		let height = y || source.height;
+		let canvasContext = canvas.getContext('2d');
+		canvas.width = 0;
+		canvas.height = 0;
+		canvas.width = width;
+		canvas.height = height;
+		canvasContext.drawImage(source, 0, 0, width, height);
+		return canvasContext;
+	},
+	makeGeometryFromImage: function (image) {
 		let t = this;
-		t.dataCanvasContext = t.dataCanvas.getContext('2d');
-		t.width = image.width * t.sampleMultiplier;
-		t.height = image.height * t.sampleMultiplier;
-		t.dataCanvas.width = t.width;
-		t.dataCanvas.height = t.height;
-		t.dataCanvasContext.clearRect(0, 0, t.width, t.height); //clearing the canvas, in case anything is left from an image with the same size loading in.
-		t.dataCanvasContext.drawImage(image, 0, 0, t.width, t.height);
-		t.data = t.dataCanvasContext.getImageData(0, 0, t.width, t.height).data;
-
+		let width = image.width * t.sampleMultiplier;
+		let height = image.height * t.sampleMultiplier;
 		let duplicateColorMap = {};
 		let colors = [];
 		let color;
 		let rgbString;
 		let offset;
 		let r, g, b, a;
-		let numPixels = t.width * t.height;
+		let numPixels = width * height;
+		let dataCanvas = document.createElement('canvas');
+		let context = t.imageSourceToCanvas(image, dataCanvas, width, height);
+		let data = context.getImageData(0, 0, width, height).data;
+		let vertexGeom = new THREE.Geometry();
 		for (let i = 0; i < numPixels; i++) {
 			offset = i * 4;
-			r = this.data[offset];
-			g = this.data[offset + 1];
-			b = this.data[offset + 2];
-			a = this.data[offset + 3];
+			r = data[offset];
+			g = data[offset + 1];
+			b = data[offset + 2];
+			a = data[offset + 3];
 			rgbString = 'rgba(' + r + ',' + g + ',' + b + ')';
 			if (!duplicateColorMap[rgbString] && a > 192) {
 				color = new THREE.Color(rgbString);
@@ -74,27 +85,33 @@ Vertifier.prototype = {
 			}
 			duplicateColorMap[rgbString] = true;
 		}
-		//Do not recycle Geometry by re-populating them with arrays of different length!
-		//Geometry creates an inner BufferGeometry which only grows! This means leftovers sometimes!
-		t.vertexGeom.dispose();
-		t.vertexGeom = new THREE.Geometry();
-		t.vertexGeom.colors = colors;
-		t.vertexGeom.colorsNeedUpdate = true;
-		t.mapColorsToVerts();
-		t.particleSystem.geometry = t.vertexGeom;
+		vertexGeom.colors = colors;
+		vertexGeom.colorsNeedUpdate = true;
+		vertexGeom.dataCanvas = dataCanvas;
+		return vertexGeom;
+	},
+	swapGeometry(vertexGeom){
+		let t = this;
+		t.vertexGeom = vertexGeom;
+		t.imageSourceToCanvas(t.vertexGeom.dataCanvas, t.dataCanvas);
+		if(t.vertexGeom.lastMapping !== t.mapMethodName){
+			t.mapColorsToVerts();
+		}
+		t.particleSystem.geometry = t.vertexGeom = vertexGeom;
 		t.callback(t);
 	},
 	loadProgress: function (xhr) {
 		console.log((xhr.loaded / xhr.total * 100) + '% loaded');
 	},
 	loadFailure: function (xhr) {
-		console.log('An error happened');
+		console.log('An error happened', xhr);
 	},
 	mapColorsToVerts: function (mapMethodName) {
 		let t = this;
 		t.mapMethodName = mapMethodName || t.mapMethodName;
 		t.vertexGeom.vertices = t.vertexGeom.colors.map(t.mapNormalizedRGBTo[t.mapMethodName]);
 		t.vertexGeom.verticesNeedUpdate = true;
+		t.vertexGeom.lastMapping = mapMethodName;
 	},
 	mapNormalizedRGBTo: {
 		xyz: function (color) {
