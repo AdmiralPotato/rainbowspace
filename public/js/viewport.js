@@ -14,7 +14,61 @@ Vue.component(
 			this.scrollListener = function(event){
 				vuePort.viewport.scroll(event.deltaX * 0.001 + event.deltaY * 0.01);
 			};
+			let imageProcessor = function(file){
+				let name = file.name;
+				let nameUnique = ['draggedUp', file.name, file.type, file.size, file.lastModified].join(':');
+				let imageAlreadyLoaded = loadedImageMap[nameUnique];
+				if(imageAlreadyLoaded){
+					console.log('file.alreadyLoaded', name);
+					settings.image = nameUnique;
+				} else {
+					let reader = new FileReader();
+					reader.onloadend = function(upload) {
+						console.log('file.loaded', name);
+						let image = new Image();
+						image.onload = function(){
+							console.log('img.loaded', name);
+							loadedImageMap[nameUnique] = image;
+							settings.imageList.push({
+								text: name,
+								value: nameUnique
+							});
+							settings.image = nameUnique;
+						};
+						image.src = upload.target.result;
+					};
+					reader.readAsDataURL(file);
+				}
+			};
+			let unimplemented = function(data, type){
+				console.log('Sorry, not yet: ' + type, data);
+			};
+			let supportedMimeTypeMap = {
+				"image/png": imageProcessor,
+				"image/jpeg": imageProcessor,
+				"image/gif": imageProcessor,
+				"image/bmp": imageProcessor,
+				"image/svg+xml": imageProcessor,
+				"text/html": unimplemented,
+			};
+			this.dragListener = function(event){
+				event.preventDefault();
+				console.log(event.type);
+				if(event.type === 'drop'){
+					let kindaList = event.dataTransfer.files; //TODO: .items soon??
+					for (let i = 0; i < kindaList.length; i++) {
+						let file = kindaList[i];
+						if(supportedMimeTypeMap.hasOwnProperty(file.type)){
+							let handler = supportedMimeTypeMap[file.type];
+							handler(file);
+						}
+					}
+				}
+			};
 			this.$el.addEventListener('wheel', this.scrollListener);
+			this.$el.addEventListener('dragover', this.dragListener);
+			this.$el.addEventListener('dragenter', this.dragListener);
+			this.$el.addEventListener('drop', this.dragListener);
 		},
 		beforeMount: function () {
 			document.addEventListener('resize', resizeWindowEventHandler);
@@ -24,6 +78,9 @@ Vue.component(
 			document.removeEventListener('resize', resizeWindowEventHandler);
 			window.removeEventListener('resize', resizeWindowEventHandler);
 			this.$el.removeEventListener('wheel', this.scrollListener);
+			this.$el.removeEventListener('dragover', this.dragListener);
+			this.$el.removeEventListener('dragenter', this.dragListener);
+			this.$el.removeEventListener('drop', this.dragListener);
 		},
 		methods: {
 			start: function (event) {

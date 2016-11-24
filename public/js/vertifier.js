@@ -32,6 +32,9 @@ Vertifier.prototype = {
 		if(image && geometry){
 			console.log('Vertifier.loadImage: using already loaded ' + imageKey);
 			t.swapGeometry(geometry);
+		} else if (image && !geometry) {
+			geometry = loadedGeomMap[imageKey] = t.makeGeometryFromImage(image);
+			t.swapGeometry(geometry);
 		} else {
 			t.loader.load(
 				imageKey,
@@ -50,6 +53,7 @@ Vertifier.prototype = {
 		let width = x || source.width;
 		let height = y || source.height;
 		let canvasContext = canvas.getContext('2d');
+		canvasContext.imageSmoothingEnabled = true;
 		canvas.width = 0;
 		canvas.height = 0;
 		canvas.width = width;

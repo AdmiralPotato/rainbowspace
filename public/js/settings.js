@@ -5,6 +5,11 @@ Vue.component(
 			settings: Object,
 			dataCanvas: HTMLCanvasElement
 		},
+		methods: {
+			clearAllImages: function(){
+				settings.imageList = [];
+			}
+		},
 		template: `
 			<div class="card">
 				<div class="card-header">Settings</div>
@@ -17,6 +22,15 @@ Vue.component(
 							:value="settings.image"
 							destinationAddress="image"
 							/>
+						<div class="row">
+							<div class="col-xs-12">
+								<button
+									type="button"
+									class="btn btn-secondary col-xs-12"
+									v-on:click="clearAllImages"
+									>Clear all</button>
+							</div>
+						</div>
 						<bSelect
 							label="Display Method"
 							:list="settings.displayMethodList"
@@ -31,21 +45,27 @@ Vue.component(
 							destinationAddress="cameraMode"
 							/>
 						<div class="row">
-							<bCheck
-								class="col-xs-6"
-								label="Auto Rotate Y"
-								:value="settings.autoRotateY"
-								destinationAddress="autoRotateY"
-								/>
-							<bCheck
-								class="col-xs-6"
-								label="Auto Rotate X"
-								:value="settings.autoRotateX"
-								destinationAddress="autoRotateX"
-								/>
+							<div class="col-xs-6">
+								<bCheck
+									class="col-xs-12"
+									label="Auto Rotate Y"
+									:value="settings.autoRotateY"
+									destinationAddress="autoRotateY"
+									/>
+							</div>
+							<div class="col-xs-6">
+								<bCheck
+									class="col-xs-12"
+									label="Auto Rotate X"
+									:value="settings.autoRotateX"
+									destinationAddress="autoRotateX"
+									/>
+							</div>
 						</div>
 						<div class="row" role="group">
-							<cameraButton v-for="item in settings.cameraPositionList" :label="item" />
+							<div class="col-xs-12">
+									<cameraButton v-for="item in settings.cameraPositionList" :label="item" />
+							</div>
 						</div>
 					</form>
 				</div>
