@@ -89,7 +89,8 @@ let Viewport = function(canvas, vueComponentInstance){
 		perspective: new THREE.PerspectiveCamera(45, 1, 0.1, 1000),
 		orthographic: new THREE.OrthographicCamera(0, 0, 0, 0, 0, 1000),
 	};
-	p.cameraMap.perspective.position.z = 25;
+	p.cameraMap.perspective.position.z = p.cameraMap.orthographic.position.z = 25;
+	p.orthographicMultiplier = 7;
 	p.camera = null;
 	p.cameraPosition = settings.cameraPosition;
 	p.renderer = new THREE.WebGLRenderer({
@@ -149,18 +150,20 @@ Viewport.prototype = {
 
 		p.cameraMap.perspective.aspect = p.width / p.height;
 		p.cameraMap.perspective.updateProjectionMatrix();
-
-		p.orthographicMultiplier = 1 / 64;
-		let oWidth = p.width * p.orthographicMultiplier;
-		let oHeight = p.height * p.orthographicMultiplier;
+		p.updateOrthographicCameraScale();
+		//p.renderer.setPixelRatio(ratio);
+		p.renderer.setViewport(0, 0, p.width, p.height);
+	},
+	updateOrthographicCameraScale: function(){
+		let p = this;
+		let orthographicScale = p.orthographicMultiplier / Math.min(p.width, p.height);
+		let oWidth = p.width * orthographicScale;
+		let oHeight = p.height * orthographicScale;
 		p.cameraMap.orthographic.right  =  oWidth;
 		p.cameraMap.orthographic.left   = -oWidth;
 		p.cameraMap.orthographic.top    =  oHeight;
 		p.cameraMap.orthographic.bottom = -oHeight;
 		p.cameraMap.orthographic.updateProjectionMatrix();
-
-		//p.renderer.setPixelRatio(ratio);
-		p.renderer.setViewport(0, 0, p.width, p.height);
 	},
 	render: function (time) {
 		let p = this;
@@ -205,7 +208,15 @@ Viewport.prototype = {
 		p.dragDiff.set(0, 0);
 	},
 	scroll: function(num){
-		this.camera.position.z += num;
+		this.cameraMap.perspective.position.z = Math.max(
+			this.cameraMap.perspective.position.z + num,
+			-1.5
+		);
+		this.orthographicMultiplier = Math.max(
+			this.orthographicMultiplier + num * 0.25,
+			0.025
+		);
+		this.updateOrthographicCameraScale();
 	}
 };
 
