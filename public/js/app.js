@@ -36,7 +36,7 @@ let settings = {
 let dataCanvas = document.createElement('canvas');
 dataCanvas.className = 'dataCanvas';
 let app = new Vue({
-	el: '#app',
+	el: '#appTarget',
 	data: {
 		showSidebar: true,
 		settings: settings,
