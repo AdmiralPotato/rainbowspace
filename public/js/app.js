@@ -31,7 +31,7 @@ let settings = {
 	cameraMode: 'perspective',
 	cameraModeList: ['perspective', 'orthographic'],
 	cameraPosition: 'free',
-	cameraPositionList: ['Top', 'Right', 'Front', 'Corner']
+	cameraPositionList: ['Top', 'Front', 'Right', 'Corner']
 };
 let dataCanvas = document.createElement('canvas');
 dataCanvas.className = 'dataCanvas';
@@ -45,6 +45,7 @@ let app = new Vue({
 	methods: {
 		settingsToggle: function(){
 			this.showSidebar = !this.showSidebar;
+			window.scrollTo(0,0);
 			setTimeout(resizeWindowEventHandler,0);
 		}
 	},
@@ -68,3 +69,7 @@ let app = new Vue({
 let monoDirectional = function(dataAddress, newValue){
 	Vue.set(app.settings, dataAddress, newValue);
 };
+
+if((/Mac OS X 10/).test(navigator.userAgent)){
+	document.body.parentNode.className += ' disableElasticScrolling';
+}

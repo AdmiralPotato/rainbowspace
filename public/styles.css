@@ -33,11 +33,15 @@ body{
 	text-decoration: none;
 	color: #ccc;
 }
+.disableElasticScrolling body{
+	overflow: hidden;
+}
 .main{
 	padding: 0;
 }
 .sidebar{
 	position: absolute;
+	top: 0;
 	background-color: #666;
 	color: #333;
 	padding: 1rem;
@@ -56,11 +60,11 @@ body{
 }
 
 .settingsToggle{
-	position: absolute;
+	position: fixed;
 	top: 0;
 	right: 0;
 	padding: 1.5rem;
-	z-index: 1;
+	z-index: 2;
 }
 
 .icon{
@@ -90,8 +94,8 @@ body{
 	padding-right: 0;
 }
 
-/*// Small devices (landscape phones, 544px and up)*/
-@media (min-width: 544px) {
+/*// Small devices (landscape phones, 576px and up)*/
+@media (min-width: 576px) {
 	.sidebar{
 		position: relative;
 		overflow-y: auto;

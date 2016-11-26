@@ -163,6 +163,8 @@ let Viewport = function(canvas, vueComponentInstance){
 
 	p.cubeGeom = new THREE.BoxGeometry(1, 1, 1);
 	p.cubeMaterial = new THREE.MeshNormalMaterial();
+	p.cubeMaterial.transparent = true;
+	p.cubeMaterial.opacity = 0;
 	p.cube = new THREE.Mesh(p.cubeGeom, p.cubeMaterial);
 	p.cube.scale.setScalar(10);
 	p.cube.material.wireframe = true;
