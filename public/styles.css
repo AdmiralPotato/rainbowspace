@@ -89,7 +89,7 @@ body{
 	user-select: none;
 }
 
-.row > .btn{
+.no-gutter{
 	padding-left: 0;
 	padding-right: 0;
 }

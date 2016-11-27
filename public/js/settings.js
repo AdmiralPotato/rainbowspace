@@ -44,27 +44,44 @@ Vue.component(
 							:value="settings.cameraMode"
 							destinationAddress="cameraMode"
 							/>
-						<div class="row">
-							<div class="col-xs-6">
-								<bCheck
-									class="col-xs-12"
+						<div class="row" role="group">
+							<div class="col-xs-12">
+								<bToggle
+									class="col-xs-6 no-gutter"
 									label="Auto Rotate Y"
-									:value="settings.autoRotateY"
 									destinationAddress="autoRotateY"
 									/>
-							</div>
-							<div class="col-xs-6">
-								<bCheck
-									class="col-xs-12"
+								<bToggle
+									class="col-xs-6 no-gutter"
 									label="Auto Rotate X"
-									:value="settings.autoRotateX"
 									destinationAddress="autoRotateX"
 									/>
 							</div>
 						</div>
-						<div class="row" role="group">
-							<div class="col-xs-12">
-									<cameraButton v-for="item in settings.cameraPositionList" :label="item" />
+						<div class="form-group">
+							<label>Camera Positions</label>
+							<div class="row" role="group">
+								<div class="col-xs-12">
+										<bButton
+											class="col-xs-6 col-lg-3 no-gutter"
+											:label="item"
+											destinationAddress="cameraPosition"
+											v-for="item in settings.cameraPositionList"
+											/>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label>Background Color</label>
+							<div class="row" role="group">
+								<div class="col-xs-12">
+									<bButton
+										class="col-xs-4"
+										:label="item"
+										destinationAddress="backgroundColor"
+										v-for="item in settings.backgroundColorList"
+										/>
+								</div>
 							</div>
 						</div>
 					</form>
@@ -159,38 +176,63 @@ Vue.component(
 	}
 );
 
-Vue.component(
-	'cameraButton',
-	{
-		data: function(){
+
+let buttonMixIn = {
+	data: function(){
+		return {
+			name: this.label.toLocaleLowerCase()
+		}
+	},
+	props: {
+		label: String,
+		destinationAddress: String
+	},
+	computed: {
+		classObject: function () {
+			let active = this.active();
 			return {
-				name: this.label.toLocaleLowerCase()
+				'btn-primary': active,
+				'btn-secondary': !active,
 			}
+		}
+	},
+	methods: {
+		active: function () {
+			return settings[this.destinationAddress] === this.name;
 		},
-		props: {
-			label: String
-		},
-		computed: {
-			classObject: function () {
-				let active = settings.cameraPosition === this.name;
-				return {
-					'btn-primary': active,
-					'btn-secondary': !active,
-				}
-			}
-		},
+		click: function () {
+			settings[this.destinationAddress] = this.name;
+		}
+	},
+	template: `
+		<button
+			type="button"
+			class="btn"
+			:class="classObject"
+			v-on:click="click"
+			>{{label}}</button>
+	`
+};
+
+Vue.component(
+	'bButton',
+	{
+		mixins: [buttonMixIn]
+	}
+);
+
+
+Vue.component(
+	'bToggle',
+	{
+		mixins: [buttonMixIn],
 		methods: {
-			setCameraMode: function () {
-				settings.cameraPosition = this.name;
+			active: function () {
+				return settings[this.destinationAddress];
+			},
+			click: function () {
+				settings[this.destinationAddress] = !settings[this.destinationAddress];
 			}
-		},
-		template: `
-			<button
-				type="button"
-				class="btn col-xs-6 col-lg-3"
-				:class="classObject"
-				v-on:click="setCameraMode"
-				>{{label}}</button>
-		`
+		}
 	}
 );

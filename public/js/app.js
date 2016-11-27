@@ -31,7 +31,9 @@ let settings = {
 	cameraMode: 'perspective',
 	cameraModeList: ['perspective', 'orthographic'],
 	cameraPosition: 'free',
-	cameraPositionList: ['Top', 'Front', 'Right', 'Corner']
+	cameraPositionList: ['Top', 'Front', 'Right', 'Corner'],
+	backgroundColor: '20',
+	backgroundColorList: ['0', '20', '40', '60', '80', '100']
 };
 let dataCanvas = document.createElement('canvas');
 dataCanvas.className = 'dataCanvas';
@@ -53,10 +55,13 @@ let app = new Vue({
 		<div class="h-100 container-fluid">
 			<div class="h-100 row">
 				<div class="settingsToggle"><a class="icon fa fa-bars" @click="settingsToggle"></a></div>
-				<div class="h-100 col-xs-12 main" :class="{'col-sm-8': showSidebar}">
+				<div class="h-100 col-xs-12 main"
+					:class="{'col-sm-8 col-xl-9': showSidebar}"
+					:style="{'backgroundColor': 'hsl(0, 0%, ' + settings.backgroundColor + '%)'}"
+					>
 					<viewport />
 				</div>
-				<div class="h-100 col-xs-12 noPad sidebar" :class="{'col-sm-4': showSidebar}" v-if="showSidebar">
+				<div class="h-100 col-xs-12 noPad sidebar" :class="{'col-sm-4 col-xl-3': showSidebar}" v-if="showSidebar">
 					<div class="h-100">
 						<settings :settings="settings" :dataCanvas="dataCanvas"></settings>
 					</div>
