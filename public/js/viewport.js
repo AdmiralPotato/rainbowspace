@@ -194,10 +194,14 @@ let Viewport = function(canvas, vueComponentInstance){
 
 Viewport.prototype = {
 	cameraPositionMap: {
-		top:    [      Math.PI / 2,            0, 0 ],
-		right:  [                0, -Math.PI / 2, 0 ],
-		front:  [                0,            0, 0 ],
-		corner: [ Math.PI / 5.1043, -Math.PI / 4, 0 ]
+		top:     [       Math.PI / 2,                0, 0 ],
+		front:   [                 0,                0, 0 ],
+		right:   [                 0,     -Math.PI / 2, 0 ],
+		wcorner: [  Math.PI / 5.1043,     -Math.PI / 4, 0 ],
+		bottom:  [      -Math.PI / 2,                0, 0 ],
+		back:    [                 0,         -Math.PI, 0 ],
+		left:    [                 0,      Math.PI / 2, 0 ],
+		bcorner: [ -Math.PI / 5.1043,  3 * Math.PI / 4, 0 ]
 	},
 	sizeWindow: function () {
 		let p = this;

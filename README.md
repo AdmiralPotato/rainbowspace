@@ -14,3 +14,5 @@ Features: Click and drag an image from your computer into the 3D viewport.
 * Tweening states
 * Grid toggle
 * Show multiple images
+* Add an actual `upload` button
+* Display image specs and option to limit size

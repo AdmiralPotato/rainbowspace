@@ -31,9 +31,19 @@ let settings = {
 	cameraMode: 'perspective',
 	cameraModeList: ['perspective', 'orthographic'],
 	cameraPosition: 'free',
-	cameraPositionList: ['Top', 'Front', 'Right', 'Corner'],
+	cameraPositionList: ['Top', 'Front', 'Right', 'WCorner', 'Bottom', 'Back', 'Left', 'BCorner'],
+	cameraPositionKeymap: {
+		'Numpad7-0': 'Top',
+		'Numpad1-0': 'Front',
+		'Numpad3-0': 'Right',
+		'Numpad5-0': 'WCorner',
+		'Numpad7-1': 'Bottom',
+		'Numpad1-1': 'Back',
+		'Numpad3-1': 'Left',
+		'Numpad5-1': 'BCorner'
+	},
 	backgroundColor: '20',
-	backgroundColorList: ['0', '20', '40', '60', '80', '100']
+	backgroundColorList: ['0', '20', '40', '60', '80', '100'],
 };
 let dataCanvas = document.createElement('canvas');
 dataCanvas.className = 'dataCanvas';
@@ -44,7 +54,23 @@ let app = new Vue({
 		settings: settings,
 		dataCanvas: dataCanvas
 	},
+	mounted: function(){
+		document.addEventListener('keydown', this.keyHandler);
+	},
+	beforeDestroy:  function(){
+		document.removeEventListener('keydown', this.keyHandler);
+	},
 	methods: {
+		keyHandler: function(keyboardEvent){
+			let key = '' + keyboardEvent.code + '-' + (0 + keyboardEvent.ctrlKey);
+			let cameraPosition = settings.cameraPositionKeymap[key];
+			if(cameraPosition){
+				if(keyboardEvent.ctrlKey){
+					keyboardEvent.preventDefault();
+				}
+				settings.cameraPosition = cameraPosition.toLocaleLowerCase();
+			}
+		},
 		settingsToggle: function(){
 			this.showSidebar = !this.showSidebar;
 			window.scrollTo(0,0);
