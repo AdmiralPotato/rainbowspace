@@ -8,14 +8,25 @@ Vue.component(
 		methods: {
 			clearAllImages: function(){
 				settings.imageList = [];
+			},
+			uploadImage: function(changeEvent){
+				let fileList = Array.prototype.slice.call(changeEvent.target.files);
+				settings.scaleImages = this.isMobile();
+				fileList.forEach(function(file){
+					viewport.vue.readFile(file);
+				});
+			},
+			isMobile: function() {
+				let result = navigator.userAgent.match(/(Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone)/i);
+				return result !== null;
 			}
 		},
 		template: `
 			<div class="card">
 				<div class="card-header">Settings</div>
-				<div class="card-block"><existingDomNode :content="dataCanvas" /></div>
 				<div class="card-block">
-					<form>
+					<existingDomNode :content="dataCanvas" />
+					<form encType="multipart/form-data">
 						<bSelect
 							label="Image"
 							:list="settings.imageList"
@@ -26,9 +37,21 @@ Vue.component(
 							<div class="col-xs-12">
 								<button
 									type="button"
-									class="btn btn-secondary col-xs-12"
+									class="btn btn-secondary col-xs-12 no-gutter"
 									v-on:click="clearAllImages"
 									>Clear all</button>
+							</div>
+							<div class="col-xs-12">
+								<label
+									for="uploadImage"
+									class="btn btn-secondary col-xs-12 no-gutter"
+									>Upload Image</label>
+								<input
+									type="file"
+									id="uploadImage"
+									style="display: none;"
+									v-on:change="uploadImage"
+									/>
 							</div>
 						</div>
 						<bSelect
@@ -47,12 +70,12 @@ Vue.component(
 						<div class="row" role="group">
 							<div class="col-xs-12">
 								<bToggle
-									class="col-xs-6 no-gutter"
+									class="col-xs-12 col-md-6 no-gutter"
 									label="Auto Rotate Y"
 									destinationAddress="autoRotateY"
 									/>
 								<bToggle
-									class="col-xs-6 no-gutter"
+									class="col-xs-12 col-md-6 no-gutter"
 									label="Auto Rotate X"
 									destinationAddress="autoRotateX"
 									/>
@@ -76,7 +99,7 @@ Vue.component(
 							<div class="row" role="group">
 								<div class="col-xs-12">
 									<bButton
-										class="col-xs-4"
+										class="col-xs-4 no-gutter"
 										:label="item"
 										destinationAddress="backgroundColor"
 										v-for="item in settings.backgroundColorList"
@@ -85,6 +108,10 @@ Vue.component(
 							</div>
 						</div>
 					</form>
+					<div>
+						<h5>RainbowSpace:<br />Color Gamut Visualizer</h5>
+						<p>A project by <a href="http://nuclearpixel.com/about/">Admiral Potato</a>.<br /><a href="https://github.com/AdmiralPotato/rainbowspace">Check out the project on GitHub</a> if you have questions, comments, feedback or issues.</p>
+					</div>
 				</div>
 			</div>
 		`,

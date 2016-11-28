@@ -10,35 +10,8 @@ Vue.component(
 		},
 		mounted: function(){
 			this.viewport = new Viewport(this.$el, this);
-
-			let readFile = function(file){
-				let name = file.name;
-				let nameUnique = ['draggedUp', file.name, file.type, file.size, file.lastModified].join(':');
-				let imageAlreadyLoaded = loadedImageMap[nameUnique];
-				if(imageAlreadyLoaded){
-					console.log('file.alreadyLoaded', name);
-					settings.image = nameUnique;
-				} else {
-					let reader = new FileReader();
-					reader.onloadend = function(upload) {
-						console.log('file.loaded', name);
-						let image = new Image();
-						image.onload = function(){
-							console.log('img.loaded', name);
-							loadedImageMap[nameUnique] = image;
-							settings.imageList.push({
-								text: name,
-								value: nameUnique
-							});
-							settings.image = nameUnique;
-						};
-						image.src = upload.target.result;
-					};
-					reader.readAsDataURL(file);
-				}
-			};
 			let handleAsFile = function(data){
-				readFile(data.getAsFile());
+				this.readFile(data.getAsFile());
 			};
 			let searchForImage = function(data){
 				data.getAsString(function(value){
@@ -99,6 +72,32 @@ Vue.component(
 		methods: {
 			handleWheel: function(event){
 				this.viewport.scroll(event.deltaX * 0.001 + event.deltaY * 0.01);
+			},
+			readFile: function(file){
+				let name = file.name;
+				let nameUnique = ['draggedUp', file.name, file.type, file.size, file.lastModified].join(':');
+				let imageAlreadyLoaded = loadedImageMap[nameUnique];
+				if(imageAlreadyLoaded){
+					console.log('file.alreadyLoaded', name);
+					settings.image = nameUnique;
+				} else {
+					let reader = new FileReader();
+					reader.onloadend = function(upload) {
+						console.log('file.loaded', name);
+						let image = new Image();
+						image.onload = function(){
+							console.log('img.loaded', name);
+							loadedImageMap[nameUnique] = image;
+							settings.imageList.push({
+								text: name,
+								value: nameUnique
+							});
+							settings.image = nameUnique;
+						};
+						image.src = upload.target.result;
+					};
+					reader.readAsDataURL(file);
+				}
 			},
 			start: function (event) {
 				let x = event.clientX;

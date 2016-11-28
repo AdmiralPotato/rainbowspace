@@ -1,6 +1,7 @@
 let settings = {
 	autoRotateY: true,
 	autoRotateX: true,
+	scaleImages: false,
 	image: 'img/logo-hue-stepped-0001.png',
 	imageList: [
 		{text: 'RainbowSpace rendered logo', value: 'img/logo-hue-stepped-0001.png'},
@@ -36,11 +37,11 @@ let settings = {
 		'Numpad7-0': 'Top',
 		'Numpad1-0': 'Front',
 		'Numpad3-0': 'Right',
-		'Numpad5-0': 'WCorner',
+		'Numpad0-0': 'WCorner',
 		'Numpad7-1': 'Bottom',
 		'Numpad1-1': 'Back',
 		'Numpad3-1': 'Left',
-		'Numpad5-1': 'BCorner'
+		'Numpad0-1': 'BCorner'
 	},
 	backgroundColor: '20',
 	backgroundColorList: ['0', '20', '40', '60', '80', '100'],
@@ -69,6 +70,11 @@ let app = new Vue({
 					keyboardEvent.preventDefault();
 				}
 				settings.cameraPosition = cameraPosition.toLocaleLowerCase();
+			}
+			if(key === 'Numpad5-0'){
+				let mode = settings.cameraMode;
+				let list = settings.cameraModeList;
+				settings.cameraMode = mode === list[0] ? list[1] : list[0];
 			}
 		},
 		settingsToggle: function(){

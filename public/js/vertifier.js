@@ -6,7 +6,6 @@ let Vertifier = function (args) {
 	t.imageUrl = args.imageUrl || console.break('MISSING IMAGE URL');
 	t.callback = args.callback || console.break('MISSING CALLBACK');
 	t.dataCanvas = args.dataCanvas || document.createElement('canvas');
-	t.sampleMultiplier = args.sampleMultiplier || 1;
 	t.mapMethodName = args.mapMethodName || 'xyz';
 
 	t.loader = new THREE.TextureLoader();
@@ -62,6 +61,12 @@ Vertifier.prototype = {
 		let height = y || source.height;
 		let canvasContext = canvas.getContext('2d');
 		canvasContext.imageSmoothingEnabled = true;
+		if(settings.scaleImages){
+			let shrank = this.calculateAspectRatioFit(width, height, 256, 256);
+			width = shrank.width;
+			height = shrank.height;
+			settings.scaleImages = false;
+		}
 		canvas.width = 0;
 		canvas.height = 0;
 		canvas.width = width;
@@ -69,10 +74,14 @@ Vertifier.prototype = {
 		canvasContext.drawImage(source, 0, 0, width, height);
 		return canvasContext;
 	},
+	calculateAspectRatioFit: function(srcWidth, srcHeight, maxWidth, maxHeight) {
+		let ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
+		return { width: srcWidth*ratio, height: srcHeight*ratio };
+	},
 	makeGeometryFromImage: function (image) {
 		let t = this;
-		let width = image.width * t.sampleMultiplier;
-		let height = image.height * t.sampleMultiplier;
+		let width = image.width;
+		let height = image.height;
 		let duplicateColorMap = {};
 		let colors = [];
 		let color;
