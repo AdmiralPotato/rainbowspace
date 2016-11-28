@@ -144,19 +144,30 @@ Vertifier.prototype = {
 		hslCones: function (color) {
 			let hsl = color.getHSL();
 			let angle = -hsl.h * Math.PI * 2;
-			let radius = 1 - (Math.abs(hsl.l - 0.5) * 2);
-			let x = Math.cos(angle) * hsl.s * 0.5 * radius;
+			let radius = (1 - (Math.abs(hsl.l - 0.5) * 2)) * hsl.s * 0.5;
+			let x = Math.cos(angle) * radius;
 			let y = hsl.l - 0.5;
-			let z = Math.sin(angle) * hsl.s * 0.5 * radius;
+			let z = Math.sin(angle) * radius;
+			return new THREE.Vector3(x, y, z);
+		},
+		hsvCone: function (color) {
+			let hsl = color.getHSL();
+			let hsv = hslToHsv(hsl);
+			let angle = -hsl.h * Math.PI * 2;
+			let radius = hsv.v * hsv.s * 0.5;
+			let x = Math.cos(angle) * radius;
+			let y = hsv.v - 0.5;
+			let z = Math.sin(angle) * radius;
 			return new THREE.Vector3(x, y, z);
 		},
 		hslSphere: function (color) {
 			let hsl = color.getHSL();
 			let angle = -hsl.h * Math.PI * 2;
-			let radius = Math.sin(hsl.l * Math.PI);
-			let x = Math.cos(angle) * hsl.s * 0.5 * radius;
-			let y = Math.cos(hsl.l * Math.PI) * -0.5;
-			let z = Math.sin(angle) * hsl.s * 0.5 * radius;
+			let lon = hsl.l * Math.PI;
+			let radius = Math.sin(lon) * hsl.s * 0.5;
+			let x = Math.cos(angle) * radius;
+			let y = Math.cos(lon) * -0.5;
+			let z = Math.sin(angle) * radius;
 			return new THREE.Vector3(x, y, z);
 		},
 		hslCube: function (color) {
@@ -168,4 +179,16 @@ Vertifier.prototype = {
 			);
 		},
 	},
+};
+
+let hslToHsv = function(hsl) {
+	let h = hsl.h;
+	let s = hsl.s;
+	let l = hsl.l;
+	s *= l < .5 ? l : 1 - l;
+	return {
+		h: h,
+		s: 2 * s / (l + s),
+		v: l + s
+	}
 };
