@@ -28,7 +28,7 @@ let settings = {
 		{text: 'hsl?', value: 'https://crossorigin.me/http://codropspz.tympanus.netdna-cdn.com/codrops/wp-content/uploads/2015/01/hsl-color-wheel.png'},
 	],
 	displayMethod: 'hslSphere',
-	displayMethodList: ['hslCylinder', 'hslCones', 'hslSphere', 'hslCube', 'hsvCone', 'xyz'],
+	displayMethodList: ['rgbCube', 'hslSphere', 'hslCones', 'hslCylinder', 'hslCube', 'hsvSphere', 'hsvCone', 'hsvCylinder', 'hsvCube'],
 	cameraMode: 'perspective',
 	cameraModeList: ['perspective', 'orthographic'],
 	cameraPosition: 'free',

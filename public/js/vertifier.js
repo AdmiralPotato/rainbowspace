@@ -6,7 +6,7 @@ let Vertifier = function (args) {
 	t.imageUrl = args.imageUrl || console.break('MISSING IMAGE URL');
 	t.callback = args.callback || console.break('MISSING CALLBACK');
 	t.dataCanvas = args.dataCanvas || document.createElement('canvas');
-	t.mapMethodName = args.mapMethodName || 'xyz';
+	t.mapMethodName = args.mapMethodName || 'rgbCube';
 
 	t.loader = new THREE.TextureLoader();
 	t.vertexGeom = new THREE.Geometry();
@@ -135,7 +135,7 @@ Vertifier.prototype = {
 		t.vertexGeom.lastMapping = mapMethodName;
 	},
 	mapNormalizedRGBTo: {
-		xyz: function (color) {
+		rgbCube: function (color) {
 			return new THREE.Vector3(
 				color.r - 0.5,
 				color.g - 0.5,
@@ -145,9 +145,19 @@ Vertifier.prototype = {
 		hslCylinder: function (color) {
 			let hsl = color.getHSL();
 			let angle = -hsl.h * Math.PI * 2;
-			let x = Math.cos(angle) * hsl.s * 0.5;
+			let radius = hsl.s * 0.5;
+			let x = Math.cos(angle) * radius;
 			let y = hsl.l - 0.5;
-			let z = Math.sin(angle) * hsl.s * 0.5;
+			let z = Math.sin(angle) * radius;
+			return new THREE.Vector3(x, y, z);
+		},
+		hsvCylinder: function (color) {
+			let hsv = hslToHsv(color.getHSL());
+			let angle = -hsv.h * Math.PI * 2;
+			let radius = hsv.s * 0.5;
+			let x = Math.cos(angle) * radius;
+			let y = hsv.v - 0.5;
+			let z = Math.sin(angle) * radius;
 			return new THREE.Vector3(x, y, z);
 		},
 		hslCones: function (color) {
@@ -160,9 +170,8 @@ Vertifier.prototype = {
 			return new THREE.Vector3(x, y, z);
 		},
 		hsvCone: function (color) {
-			let hsl = color.getHSL();
-			let hsv = hslToHsv(hsl);
-			let angle = -hsl.h * Math.PI * 2;
+			let hsv = hslToHsv(color.getHSL());
+			let angle = -hsv.h * Math.PI * 2;
 			let radius = hsv.v * hsv.s * 0.5;
 			let x = Math.cos(angle) * radius;
 			let y = hsv.v - 0.5;
@@ -179,12 +188,30 @@ Vertifier.prototype = {
 			let z = Math.sin(angle) * radius;
 			return new THREE.Vector3(x, y, z);
 		},
+		hsvSphere: function (color) {
+			let hsv = hslToHsv(color.getHSL());
+			let angle = -hsv.h * Math.PI * 2;
+			let lon = hsv.v * Math.PI;
+			let radius = Math.sin(lon) * hsv.s * 0.5;
+			let x = Math.cos(angle) * radius;
+			let y = Math.cos(lon) * -0.5;
+			let z = Math.sin(angle) * radius;
+			return new THREE.Vector3(x, y, z);
+		},
 		hslCube: function (color) {
 			let hsl = color.getHSL();
 			return new THREE.Vector3(
 				hsl.h - 0.5,
 				hsl.s - 0.5,
 				hsl.l - 0.5
+			);
+		},
+		hsvCube: function (color) {
+			let hsv = hslToHsv(color.getHSL());
+			return new THREE.Vector3(
+				hsv.h - 0.5,
+				hsv.s - 0.5,
+				hsv.v - 0.5
 			);
 		},
 	},
