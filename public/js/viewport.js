@@ -9,12 +9,9 @@ Vue.component(
 			};
 		},
 		mounted: function(){
-			let vuePort = this;
 			this.viewport = new Viewport(this.$el, this);
-			this.scrollListener = function(event){
-				vuePort.viewport.scroll(event.deltaX * 0.001 + event.deltaY * 0.01);
-			};
-			let imageProcessor = function(file){
+
+			let readFile = function(file){
 				let name = file.name;
 				let nameUnique = ['draggedUp', file.name, file.type, file.size, file.lastModified].join(':');
 				let imageAlreadyLoaded = loadedImageMap[nameUnique];
@@ -40,35 +37,52 @@ Vue.component(
 					reader.readAsDataURL(file);
 				}
 			};
-			let unimplemented = function(data, type){
-				console.log('Sorry, not yet: ' + type, data);
+			let handleAsFile = function(data){
+				readFile(data.getAsFile());
 			};
-			let supportedMimeTypeMap = {
-				"image/png": imageProcessor,
-				"image/jpeg": imageProcessor,
-				"image/gif": imageProcessor,
-				"image/bmp": imageProcessor,
-				"image/svg+xml": imageProcessor,
-				"text/html": unimplemented,
+			let searchForImage = function(data){
+				data.getAsString(function(value){
+					let imageTagRegexExec = /(<img.*?>)/i.exec(value);
+					let img = imageTagRegexExec && imageTagRegexExec[1] ? imageTagRegexExec[1] : null;
+					let srcExec = img ? /src="(.*?)"/i.exec(img) : null;
+					let altExec = img ? /alt="(.*?)"/i.exec(img) : null;
+					let src = srcExec ? srcExec[1] : null;
+					let alt = altExec ? altExec[1] : null;
+					if(src){
+						settings.imageList.push({
+							text: (alt || src.split('/').pop()),
+							value: src
+						});
+						settings.image = src;
+					}
+				});
 			};
-			this.dragListener = function(event){
+			let supportedTypeMap = {
+				"image/png": handleAsFile,
+				"image/jpeg": handleAsFile,
+				"image/gif": handleAsFile,
+				"image/bmp": handleAsFile,
+				"image/svg+xml": handleAsFile,
+				"text/html": searchForImage,
+			};
+			this.handleDrag = function(event){
 				event.preventDefault();
 				console.log(event.type);
 				if(event.type === 'drop'){
-					let kindaList = event.dataTransfer.files; //TODO: .items soon??
-					for (let i = 0; i < kindaList.length; i++) {
-						let file = kindaList[i];
-						if(supportedMimeTypeMap.hasOwnProperty(file.type)){
-							let handler = supportedMimeTypeMap[file.type];
-							handler(file);
+					let itemList = Array.prototype.slice.call(event.dataTransfer.items);
+					let handleType = function(item){
+						if(supportedTypeMap.hasOwnProperty(item.type)){
+							let handler = supportedTypeMap[item.type];
+							handler(item);
 						}
-					}
+					};
+					itemList.forEach(handleType);
 				}
 			};
-			this.$el.addEventListener('wheel', this.scrollListener);
-			this.$el.addEventListener('dragover', this.dragListener);
-			this.$el.addEventListener('dragenter', this.dragListener);
-			this.$el.addEventListener('drop', this.dragListener);
+			this.$el.addEventListener('wheel', this.handleWheel);
+			this.$el.addEventListener('dragover', this.handleDrag);
+			this.$el.addEventListener('dragenter', this.handleDrag);
+			this.$el.addEventListener('drop', this.handleDrag);
 		},
 		beforeMount: function () {
 			document.addEventListener('resize', resizeWindowEventHandler);
@@ -77,12 +91,15 @@ Vue.component(
 		beforeDestroy: function () {
 			document.removeEventListener('resize', resizeWindowEventHandler);
 			window.removeEventListener('resize', resizeWindowEventHandler);
-			this.$el.removeEventListener('wheel', this.scrollListener);
-			this.$el.removeEventListener('dragover', this.dragListener);
-			this.$el.removeEventListener('dragenter', this.dragListener);
-			this.$el.removeEventListener('drop', this.dragListener);
+			this.$el.removeEventListener('wheel', this.handleWheel);
+			this.$el.removeEventListener('dragover', this.handleDrag);
+			this.$el.removeEventListener('dragenter', this.handleDrag);
+			this.$el.removeEventListener('drop', this.handleDrag);
 		},
 		methods: {
+			handleWheel: function(event){
+				this.viewport.scroll(event.deltaX * 0.001 + event.deltaY * 0.01);
+			},
 			start: function (event) {
 				let x = event.clientX;
 				let y = event.clientY;

@@ -24,9 +24,11 @@ let Vertifier = function (args) {
 };
 
 Vertifier.prototype = {
-	loadImage: function(imageUrl){
+	crossOriginProxy: 'http://crossorigin.me/',
+	loadImage: function(imageUrl, tryWithCrossOrigin){
 		let t = this;
 		let imageKey = t.imageUrl = imageUrl || t.imageUrl; //TODO: brain better later. force lexical capturing now.
+		let origin = tryWithCrossOrigin ? t.crossOriginProxy : '';
 		let image = loadedImageMap[imageKey];
 		let geometry = loadedGeomMap[imageKey];
 		if(image && geometry){
@@ -37,7 +39,7 @@ Vertifier.prototype = {
 			t.swapGeometry(geometry);
 		} else {
 			t.loader.load(
-				imageKey,
+				origin + imageKey,
 				function (texture) {
 					console.log('Vertifier.loadImage: finished loading ' + imageKey);
 					image = loadedImageMap[imageKey] = texture.image;
@@ -45,7 +47,13 @@ Vertifier.prototype = {
 					t.swapGeometry(geometry);
 				},
 				t.loadProgress,
-				t.loadFailure
+				function(xhr){
+					if(!tryWithCrossOrigin){
+						t.loadImage(imageUrl, true);
+					} else {
+						t.loadFailure(xhr);
+					}
+				}
 			);
 		}
 	},
