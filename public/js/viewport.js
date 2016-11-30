@@ -9,9 +9,10 @@ Vue.component(
 			};
 		},
 		mounted: function(){
+			let t = this;
 			this.viewport = new Viewport(this.$el, this);
 			let handleAsFile = function(data){
-				this.readFile(data.getAsFile());
+				t.readFile(data.getAsFile());
 			};
 			let searchForImage = function(data){
 				data.getAsString(function(value){
