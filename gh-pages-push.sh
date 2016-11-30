@@ -3,6 +3,6 @@ read -p "Are you SURE you want to delete your remote gh-pages branch and replace
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-	git -c core.quotepath=false push --progress --porcelain origin :gh-pages
-	git subtree push --prefix public origin gh-pages
+	git subtree push --prefix public origin gh-pages-temp
+	git push origin origin/gh-pages-temp:refs/heads/gh-pages :gh-pages-temp
 fi
