@@ -60,6 +60,15 @@ Vue.component(
 							:value="settings.displayMethod"
 							destinationAddress="displayMethod"
 							/>
+						<div class="row">
+							<div class="col-xs-12">
+								<bToggle
+									class="col-xs-12 no-gutter"
+									label="Show Bounds"
+									destinationAddress="showBounds"
+									/>
+							</div>
+						</div>
 						<hr />
 						<bSelect
 							label="Camera Mode"
@@ -94,19 +103,12 @@ Vue.component(
 								</div>
 							</div>
 						</div>
-						<div class="form-group">
-							<label>Background Color</label>
-							<div class="row" role="group">
-								<div class="col-xs-12">
-									<bButton
-										class="col-xs-4 no-gutter"
-										:label="item"
-										destinationAddress="backgroundColor"
-										v-for="item in settings.backgroundColorList"
-										/>
-								</div>
-							</div>
-						</div>
+						<bSelect
+							label="Background Color"
+							:value="settings.backgroundColor"
+							:list="settings.backgroundColorList"
+							destinationAddress="backgroundColor"
+							/>
 					</form>
 					<div>
 						<h5>RainbowSpace:<br />Color Gamut Visualizer</h5>

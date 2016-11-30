@@ -178,21 +178,34 @@ let Viewport = function(canvas, vueComponentInstance){
 	p.ambientLight = new THREE.AmbientLight(0xffffff);
 	p.scene.add(p.ambientLight);
 
-	p.cubeGeom = new THREE.BoxGeometry(1, 1, 1);
-	p.cubeMaterial = new THREE.MeshNormalMaterial();
-	p.cubeMaterial.transparent = true;
-	p.cubeMaterial.opacity = 0;
-	p.cube = new THREE.Mesh(p.cubeGeom, p.cubeMaterial);
-	p.cube.scale.setScalar(10);
-	p.cube.material.wireframe = true;
-	p.scene.add(p.cube);
+	let radialSegments = 24;
+	let openEnds = false;
+	p.boundingGeometry = {
+		Cone: new THREE.ConeGeometry(0.5, -1, radialSegments, 0, openEnds),
+		Cones: new THREE.SphereGeometry(0.5, radialSegments, 2),
+		Cube: new THREE.BoxGeometry(1, 1, 1),
+		Cylinder: new THREE.CylinderGeometry(0.5, 0.5, 1, radialSegments, 1, openEnds),
+		Sphere: new THREE.SphereGeometry(0.5, radialSegments, radialSegments / 2)
+	};
+	p.boundsMaterial = new THREE.MeshBasicMaterial();
+	p.boundsMaterial.wireframe = true;
+	p.boundsMaterial.opacity = 0.2;
+	p.boundsMaterial.color.setHSL(0,0,0.5);
+	p.boundsMaterial.transparent = true;
+	p.bounds = new THREE.Mesh(undefined, p.boundsMaterial);
+	p.bounds.scale.setScalar(1.05);
+	p.origin = new THREE.Object3D();
+	p.origin.scale.setScalar(10);
+	p.origin.rotation.x = Math.PI / 6;
+	p.origin.add(p.bounds);
+	p.scene.add(p.origin);
 
 	p.vertifier = new Vertifier({
 		imageUrl: settings.image,
 		callback: function(){
 			//not quite sure why this doesn't work unless I add it after the image load
-			p.cube.remove(p.vertifier.particleSystem);
-			p.cube.add(p.vertifier.particleSystem);
+			p.origin.remove(p.vertifier.particleSystem);
+			p.origin.add(p.vertifier.particleSystem);
 		},
 		dataCanvas: dataCanvas
 	});
@@ -247,17 +260,17 @@ Viewport.prototype = {
 	},
 	render: function (time) {
 		let p = this;
-		if(settings.autoRotateY) {p.cube.rotation.y += 0.005;}
-		if(settings.autoRotateX) {p.cube.rotation.x += 0.005;}
+		if(settings.autoRotateY) {p.origin.rotation.y += 0.005;}
+		if(settings.autoRotateX) {p.origin.rotation.x += 0.005;}
 		if(settings.cameraPosition !== 'free' && settings.cameraPosition !== p.cameraPosition){
 			settings.autoRotateY = false;
 			settings.autoRotateX = false;
 			p.cameraPosition = settings.cameraPosition;
-			p.cube.rotation.fromArray(p.cameraPositionMap[p.cameraPosition]);
+			p.origin.rotation.fromArray(p.cameraPositionMap[p.cameraPosition]);
 		}
 		if(p.dragging){
-			p.cube.rotation.x += p.dragDiff.y * -0.01;
-			p.cube.rotation.y += p.dragDiff.x * -0.01;
+			p.origin.rotation.x += p.dragDiff.y * -0.01;
+			p.origin.rotation.y += p.dragDiff.x * -0.01;
 			p.dragDiff.set(0, 0);
 		}
 
@@ -266,8 +279,14 @@ Viewport.prototype = {
 			p.vertifier.loadImage(settings.image);
 		}
 		if(p.vertifier.mapMethodName !== settings.displayMethod){
+			let geomName = settings.displayMethod.slice(3);
+			let boundingGeom = p.boundingGeometry[geomName];
+			if(boundingGeom){
+				p.bounds.geometry = boundingGeom;
+			}
 			p.vertifier.mapColorsToVerts(settings.displayMethod);
 		}
+		p.bounds.visible = settings.showBounds;
 		p.renderer.render(p.scene, p.camera);
 	},
 	dragStart: function(x, y){

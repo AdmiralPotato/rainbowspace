@@ -1,7 +1,8 @@
 let settings = {
 	autoRotateY: true,
-	autoRotateX: true,
+	autoRotateX: false,
 	scaleImages: false,
+	showBounds: true,
 	image: 'img/logo-hue-stepped-0001.png',
 	imageList: [
 		{text: 'RainbowSpace rendered logo', value: 'img/logo-hue-stepped-0001.png'},
@@ -44,7 +45,7 @@ let settings = {
 		'Numpad0-1': 'BCorner'
 	},
 	backgroundColor: '20',
-	backgroundColorList: ['0', '20', '40', '60', '80', '100'],
+	backgroundColorList: ['0', '20', '40', '50', '60', '80', '100'],
 };
 let dataCanvas = document.createElement('canvas');
 dataCanvas.className = 'dataCanvas';
