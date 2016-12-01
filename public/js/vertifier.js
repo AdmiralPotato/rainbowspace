@@ -126,6 +126,7 @@ Vertifier.prototype = {
 	},
 	loadFailure: function (xhr) {
 		console.log('An error happened', xhr);
+		alert('Sorry, was not able to load that image - still working out all the bugs. Try an image from another source?');
 	},
 	mapColorsToVerts: function (mapMethodName) {
 		let t = this;

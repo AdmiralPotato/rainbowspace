@@ -15,8 +15,9 @@ Vue.component(
 				t.readFile(data.getAsFile());
 			};
 			let searchForImage = function(data){
-				data.getAsString(function(value){
-					let imageTagRegexExec = /(<img.*?>)/i.exec(value);
+				data.getAsString(function(raw){
+					let value = ' ' + raw.replace(/\n/g, ' ') + ' ';
+					let imageTagRegexExec = /.*(\<img.*?\>)/i.exec(value);
 					let img = imageTagRegexExec && imageTagRegexExec[1] ? imageTagRegexExec[1] : null;
 					let srcExec = img ? /src="(.*?)"/i.exec(img) : null;
 					let altExec = img ? /alt="(.*?)"/i.exec(img) : null;
@@ -44,13 +45,18 @@ Vue.component(
 				console.log(event.type);
 				if(event.type === 'drop'){
 					let itemList = Array.prototype.slice.call(event.dataTransfer.items);
+					let anySuitableHandler = false;
 					let handleType = function(item){
 						if(supportedTypeMap.hasOwnProperty(item.type)){
 							let handler = supportedTypeMap[item.type];
 							handler(item);
+							anySuitableHandler = true;
 						}
 					};
 					itemList.forEach(handleType);
+					if(!anySuitableHandler){
+						alert('Sorry, was not able to load that image - still working out all the bugs. Try an image from another source?');
+					}
 				}
 			};
 			this.$el.addEventListener('wheel', this.handleWheel);
