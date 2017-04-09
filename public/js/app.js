@@ -6,7 +6,7 @@ let settings = {
 	image: 'http://i.imgur.com/T2lAyjx.png',
 	imageList: [
 		{text: 'RainbowSpace rendered logo', value: 'http://i.imgur.com/SXJ6pGK.png'},
-		{text: 'RainbowSpace pained logo', value: 'http://i.imgur.com/T2lAyjx.png'},
+		{text: 'RainbowSpace painted logo', value: 'http://i.imgur.com/T2lAyjx.png'},
 		{text: 'Triangle - Cyan, Magenta, Yellow', value: 'http://i.imgur.com/7zOi9i3.png'},
 		{text: 'Triangle - Red, Yellow, Blue', value: 'http://i.imgur.com/EUe7UYD.png'},
 		{text: 'Ghost & Candy Corn', value: 'http://i.imgur.com/sdEo3fXl.jpg'},
