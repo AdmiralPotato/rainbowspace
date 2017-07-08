@@ -2,6 +2,11 @@
 
 A tool for inspecting the color gamut of images in 3D.
 
+![3d color space visualisation](https://68.media.tumblr.com/8807fbf55d3f69e97945093d691cc87e/tumblr_ohhkonN4Dq1relaado2_400.gif)
+![dragging user images into the viewport](https://68.media.tumblr.com/fb3ea261f867107812d89b8e0fd0c341/tumblr_ohhkonN4Dq1relaado1_400.gif)
+![exploring different spacial mappings](https://68.media.tumblr.com/2994df8a5935eacf324769f0db1847dd/tumblr_ohhkonN4Dq1relaado3_r1_400.gif)
+![using camera input from a smartphone](https://68.media.tumblr.com/d27e99a5634f8e9da63a7bd74a8f9e4a/tumblr_ohhkonN4Dq1relaado4_400.gif)
+
 ###Features:
 * Drag an image from your computer or another web browser window into the 3D viewport
 * Use the "Upload Image" button and select existing image, or take a picture with your phone/tablet camera
