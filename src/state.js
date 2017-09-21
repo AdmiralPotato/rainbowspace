@@ -1,6 +1,4 @@
-"use strict";
-
-let settings = {
+export default {
 	autoRotateY: true,
 	autoRotateX: false,
 	scaleImages: false,
@@ -48,68 +46,4 @@ let settings = {
 	},
 	backgroundColor: '20',
 	backgroundColorList: ['0', '20', '40', '50', '60', '80', '100'],
-};
-let dataCanvas = document.createElement('canvas');
-dataCanvas.className = 'dataCanvas';
-let app = new Vue({
-	el: '#appTarget',
-	data: {
-		showSidebar: true,
-		settings: settings,
-		dataCanvas: dataCanvas
-	},
-	mounted: function(){
-		document.addEventListener('keydown', this.keyHandler);
-	},
-	beforeDestroy:  function(){
-		document.removeEventListener('keydown', this.keyHandler);
-	},
-	methods: {
-		keyHandler: function(keyboardEvent){
-			let key = '' + keyboardEvent.code + '-' + (0 + keyboardEvent.ctrlKey);
-			let cameraPosition = settings.cameraPositionKeymap[key];
-			if(cameraPosition){
-				if(keyboardEvent.ctrlKey){
-					keyboardEvent.preventDefault();
-				}
-				settings.cameraPosition = cameraPosition.toLocaleLowerCase();
-			}
-			if(key === 'Numpad5-0'){
-				let mode = settings.cameraMode;
-				let list = settings.cameraModeList;
-				settings.cameraMode = mode === list[0] ? list[1] : list[0];
-			}
-		},
-		settingsToggle: function(){
-			this.showSidebar = !this.showSidebar;
-			window.scrollTo(0,0);
-			setTimeout(resizeWindowEventHandler,0);
-		}
-	},
-	template: `
-		<div class="h-100 container-fluid">
-			<div class="h-100 row">
-				<div class="settingsToggle"><a class="icon fa fa-bars" @click="settingsToggle"></a></div>
-				<div class="h-100 col-xs-12 main"
-					:class="{'col-sm-8 col-xl-9': showSidebar}"
-					:style="{'backgroundColor': 'hsl(0, 0%, ' + settings.backgroundColor + '%)'}"
-					>
-					<viewport />
-				</div>
-				<div class="h-100 col-xs-12 noPad sidebar" :class="{'col-sm-4 col-xl-3': showSidebar}" v-if="showSidebar">
-					<div class="h-100">
-						<settings :settings="settings" :dataCanvas="dataCanvas"></settings>
-					</div>
-				</div>
-			</div>
-		</div>
-	`
-});
-
-let monoDirectional = function(dataAddress, newValue){
-	Vue.set(app.settings, dataAddress, newValue);
-};
-
-if((/Mac OS X 10/).test(navigator.userAgent)){
-	document.body.parentNode.className += ' disableElasticScrolling';
 }

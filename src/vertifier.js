@@ -1,4 +1,5 @@
-"use strict";
+import state from './state';
+import * as THREE from 'three';
 
 let loadedImageMap = {};
 let loadedGeomMap = {};
@@ -63,11 +64,11 @@ Vertifier.prototype = {
 		let height = y || source.height;
 		let canvasContext = canvas.getContext('2d');
 		canvasContext.imageSmoothingEnabled = true;
-		if(settings.scaleImages){
+		if(state.scaleImages){
 			let shrank = this.calculateAspectRatioFit(width, height, 256, 256);
 			width = shrank.width;
 			height = shrank.height;
-			settings.scaleImages = false;
+			state.scaleImages = false;
 		}
 		canvas.width = 0;
 		canvas.height = 0;
@@ -231,3 +232,5 @@ let hslToHsv = function(hsl) {
 		v: l + s
 	}
 };
+
+export default Vertifier;

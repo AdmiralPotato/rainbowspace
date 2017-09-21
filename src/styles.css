@@ -67,6 +67,11 @@ body{
 	z-index: 2;
 }
 
+.settings .btn{
+	border: 1px solid rgba(0, 0, 0, 0.125);
+	margin: 1px 0;
+}
+
 .icon{
 	display: inline-block;
 	height: 2rem;
