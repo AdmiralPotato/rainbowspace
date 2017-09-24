@@ -5,7 +5,8 @@
   "main": "public/index.html",
   "scripts": {
     "dev": "vue build --config vue-config.js -o",
-    "build": "vue build --config vue-config.js --prod"
+    "build": "vue build --config vue-config.js --prod",
+    "deploy": "push-dir --dir=public --branch=gh-pages --cleanup"
   },
   "repository": {
     "type": "git",
@@ -30,5 +31,8 @@
     "three": "0.82.1",
     "vue": "^2.4.2",
     "vue-cli": "^2.8.2"
+  },
+  "devDependencies": {
+    "push-dir": "^0.4.1"
   }
 }
