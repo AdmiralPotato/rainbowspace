@@ -1,7 +1,6 @@
 <template>
 	<div class="h-100 container-fluid">
 		<div class="h-100 row">
-			<div class="settingsToggle"><a class="icon fa fa-bars" @click="settingsToggle"></a></div>
 			<div class="h-100 col-12 main"
 				 :class="{'col-sm-8 col-xl-9': showSidebar}"
 				 :style="{'backgroundColor': 'hsl(0, 0%, ' + settings.backgroundColor + '%)'}"
@@ -9,13 +8,14 @@
 				<viewport :dataCanvas="dataCanvas"></viewport>
 			</div>
 			<div
-				class="h-100 col-12 sidebar"
-				:class="{'col-sm-4 col-xl-3': showSidebar}"
-				v-if="showSidebar"
+				:class="{'sidebar h-100 col-12 col-sm-4 col-xl-3': showSidebar}"
 			>
-				<div class="h-100">
-					<settings :settings="settings" :dataCanvas="dataCanvas"></settings>
-				</div>
+				<div class="settingsToggle"><a class="icon fa fa-bars" @click="settingsToggle"></a></div>
+				<settings
+					v-if="showSidebar"
+					:settings="settings"
+					:dataCanvas="dataCanvas"
+				></settings>
 			</div>
 		</div>
 	</div>

@@ -3,8 +3,9 @@
 		type="button"
 		class="btn"
 		:class="classObject"
-		v-on:click="click"
-	>{{label}}</button>
+		@click="click"
+		v-html="displayLabel"
+	></button>
 </template>
 <script>
 	import {buttonMixin} from './mixin-input';

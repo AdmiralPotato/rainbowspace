@@ -3,9 +3,8 @@
 		<div class="card-header">Settings</div>
 		<div class="card-body">
 			<existingDomNode :content="dataCanvas"></existingDomNode>
-			<div class="container fluid">
-				<form encType="multipart/form-data">
-					<div class="row">
+			<form encType="multipart/form-data">
+					<div class="form-group no-gutters">
 						<input-select
 							label="Image"
 							:list="settings.imageList"
@@ -14,12 +13,12 @@
 						></input-select>
 						<button
 							type="button"
-							class="btn btn-primary col-12 no-gutter"
+							class="btn btn-primary col-12"
 							v-on:click="clearAllImages"
 						>Clear all</button>
 						<label
 							for="uploadImage"
-							class="btn btn-primary col-12 no-gutter"
+							class="btn btn-primary col-12"
 						>Upload Image</label>
 						<input
 							type="file"
@@ -27,27 +26,31 @@
 							style="display: none;"
 							v-on:change="uploadImage"
 						/>
+					</div>
+					<div class="form-group no-gutters">
 						<input-select
-							class="col-12 no-gutter"
+							class="col-12"
 							label="Display Method"
 							:list="settings.displayMethodList"
 							:value="settings.displayMethod"
 							destinationAddress="displayMethod"
 						></input-select>
 						<input-toggle
-							class="col-12 no-gutter"
+							class="col-12"
 							label="Show Bounds"
 							destinationAddress="showBounds"
 						></input-toggle>
-						<hr />
+					</div>
+					<hr />
+					<div class="form-group no-gutters">
 						<input-select
-							class="col-12 no-gutter"
+							class="col-12"
 							label="Camera Mode"
 							:list="settings.cameraModeList"
 							:value="settings.cameraMode"
 							destinationAddress="cameraMode"
 						></input-select>
-						<div class="form-group col-12 no-gutter">
+						<div class="form-group no-gutters col-12">
 							<label>Automatic Rotation</label>
 							<div role="group">
 								<input-toggle
@@ -55,17 +58,17 @@
 									label="SpinY"
 									destinationAddress="autoRotateY"
 								></input-toggle><input-toggle
-									class="col-6"
-									label="SpinX"
-									destinationAddress="autoRotateX"
-								></input-toggle>
+								class="col-6"
+								label="SpinX"
+								destinationAddress="autoRotateX"
+							></input-toggle>
 							</div>
 						</div>
-						<div class="form-group col-12 no-gutter">
+						<div class="form-group no-gutters col-12">
 							<label>Camera Positions</label>
 							<div role="group">
 								<input-button
-									class="col-6 col-lg-3 no-gutter"
+									class="col-6 col-lg-3"
 									:label="item"
 									destinationAddress="cameraPosition"
 									v-for="item in settings.cameraPositionList"
@@ -73,15 +76,14 @@
 							</div>
 						</div>
 						<input-select
-							class="col-12 no-gutter"
+							class="col-12"
 							label="Background Color"
 							:value="settings.backgroundColor"
 							:list="settings.backgroundColorList"
 							destinationAddress="backgroundColor"
 						></input-select>
 					</div>
-				</form>
-			</div>
+			</form>
 			<div>
 				<h5>RainbowSpace:<br />Color Gamut Visualizer</h5>
 				<p>A project by <a href="http://nuclearpixel.com/about/">Admiral Potato</a>.<br /><a href="https://github.com/AdmiralPotato/rainbowspace">Check out the project on GitHub</a> if you have questions, comments, feedback or issues.</p>

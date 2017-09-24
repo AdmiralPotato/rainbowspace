@@ -51,7 +51,6 @@ These are the setups I have access to, so these are what I can ensure work prope
 * Any kind of persistence
 * Ability to share a particular image/configuration via link
 * Some kind of error displays when things break
-* Figure out what to do with the settings toggle margin issue on windows desktop
 
 
 ## Install and local development

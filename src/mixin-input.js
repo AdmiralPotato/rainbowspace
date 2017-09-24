@@ -42,6 +42,9 @@ export let buttonMixin = {
 				'btn-primary': active,
 				'btn-light': !active,
 			}
+		},
+		displayLabel: function () {
+			return this.label
 		}
 	},
 	methods: {

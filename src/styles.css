@@ -71,6 +71,11 @@ body{
 	border: 1px solid rgba(0, 0, 0, 0.125);
 	margin: 1px 0;
 }
+.settings .fa:before{
+	display: inline-block;
+	width: 1rem;
+	text-align: left;
+}
 
 .icon{
 	display: inline-block;
@@ -89,14 +94,11 @@ body{
 	color: #999;
 }
 
+.settingsToggle,
+canvas,
 .form-group label,
 .form-check label {
 	user-select: none;
-}
-
-.no-gutter{
-	padding-left: 0;
-	padding-right: 0;
 }
 
 /*// Small devices (landscape phones, 576px and up)*/
@@ -106,6 +108,9 @@ body{
 		overflow-y: auto;
 		overflow-x: hidden;
 		max-height: 100%;
+	}
+	.settingsToggle{
+		position: absolute;
 	}
 }
 
