@@ -42,6 +42,7 @@ body{
 .sidebar{
 	position: absolute;
 	top: 0;
+	right: 0;
 	background-color: #666;
 	color: #333;
 	padding: 1rem;

@@ -8,9 +8,14 @@
 				<viewport :dataCanvas="dataCanvas"></viewport>
 			</div>
 			<div
+				class=""
 				:class="{'sidebar h-100 col-12 col-sm-4 col-xl-3': showSidebar}"
 			>
-				<div class="settingsToggle"><a class="icon fa fa-bars" @click="settingsToggle"></a></div>
+				<div class="settingsToggle"><a
+					class="icon fa"
+					:class="showSidebar ? 'fa-times' : 'fa-sliders'"
+					@click="settingsToggle"
+				></a></div>
 				<settings
 					v-if="showSidebar"
 					:settings="settings"
@@ -70,7 +75,7 @@
 			settingsToggle: function(){
 				this.showSidebar = !this.showSidebar;
 				window.scrollTo(0,0);
-				Vue.nextTick(resizeWindowEventHandler);
+				requestAnimationFrame(resizeWindowEventHandler);
 			}
 		}
 	}
