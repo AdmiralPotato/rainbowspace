@@ -1,9 +1,6 @@
 import state from './state';
 import * as THREE from 'three';
 
-let loadedImageMap = {};
-let loadedGeomMap = {};
-
 let Vertifier = function (args) {
 	let t = this;
 	t.imageUrl = args.imageUrl || console.break('MISSING IMAGE URL');
@@ -25,27 +22,30 @@ let Vertifier = function (args) {
 	t.loadImage();
 };
 
+Vertifier.loadedImageMap = {};
+Vertifier.loadedGeomMap = {};
+
 Vertifier.prototype = {
 	crossOriginProxy: 'http://crossorigin.me/',
 	loadImage: function(imageUrl, tryWithCrossOrigin){
 		let t = this;
 		let imageKey = t.imageUrl = imageUrl || t.imageUrl; //TODO: brain better later. force lexical capturing now.
 		let origin = tryWithCrossOrigin ? t.crossOriginProxy : '';
-		let image = loadedImageMap[imageKey];
-		let geometry = loadedGeomMap[imageKey];
+		let image = Vertifier.loadedImageMap[imageKey];
+		let geometry = Vertifier.loadedGeomMap[imageKey];
 		if(image && geometry){
 			console.log('Vertifier.loadImage: using already loaded ' + imageKey);
 			t.swapGeometry(geometry);
 		} else if (image && !geometry) {
-			geometry = loadedGeomMap[imageKey] = t.makeGeometryFromImage(image);
+			geometry = Vertifier.loadedGeomMap[imageKey] = t.makeGeometryFromImage(image);
 			t.swapGeometry(geometry);
 		} else {
 			t.loader.load(
 				origin + imageKey,
 				function (texture) {
 					console.log('Vertifier.loadImage: finished loading ' + imageKey);
-					image = loadedImageMap[imageKey] = texture.image;
-					geometry = loadedGeomMap[imageKey] = t.makeGeometryFromImage(image);
+					image = Vertifier.loadedImageMap[imageKey] = texture.image;
+					geometry = Vertifier.loadedGeomMap[imageKey] = t.makeGeometryFromImage(image);
 					t.swapGeometry(geometry);
 				},
 				t.loadProgress,

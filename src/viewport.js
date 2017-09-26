@@ -3,7 +3,6 @@ import Vertifier from './vertifier';
 import * as THREE from 'three';
 
 let viewportList = [];
-let viewport;
 let Viewport = function(renderCanvas, vueComponentInstance, dataCanvas){
 	let p = this;
 	p.width = 0;
@@ -72,7 +71,7 @@ let Viewport = function(renderCanvas, vueComponentInstance, dataCanvas){
 
 	p.sizeWindow();
 	viewportList.push(p);
-	viewport = p;
+	window.viewport = p;
 };
 
 Viewport.prototype = {

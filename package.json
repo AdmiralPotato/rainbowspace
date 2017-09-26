@@ -1,6 +1,6 @@
 {
   "name": "rainbowspace",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A tool for inspecting the color gamut of 2D images in 3D space.",
   "main": "public/index.html",
   "scripts": {

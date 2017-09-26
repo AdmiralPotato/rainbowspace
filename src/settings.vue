@@ -2,7 +2,7 @@
 	<div class="card settings">
 		<div class="card-header">Settings</div>
 		<div class="card-body">
-			<existingDomNode :content="dataCanvas"></existingDomNode>
+			<existingDomNode class="dataCanvasHolder" :content="dataCanvas"></existingDomNode>
 			<form encType="multipart/form-data">
 					<div class="form-group no-gutters">
 						<input-select
@@ -119,7 +119,7 @@
 				let fileList = Array.prototype.slice.call(changeEvent.target.files);
 				state.scaleImages = this.isMobile();
 				fileList.forEach(function(file){
-					viewport.vue.readFile(file);
+					window.viewport.vue.readFile(file);
 				});
 			},
 			isMobile: function() {

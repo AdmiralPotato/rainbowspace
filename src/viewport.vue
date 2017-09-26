@@ -16,6 +16,7 @@
 <script>
 	import state from './state';
 	import Viewport from './viewport';
+	import Vertifier from './vertifier';
 	import { resizeWindowEventHandler } from './viewport.js'
 
 	export default {
@@ -104,7 +105,7 @@
 			readFile: function(file){
 				let name = file.name;
 				let nameUnique = ['draggedUp', file.name, file.type, file.size, file.lastModified].join(':');
-				let imageAlreadyLoaded = loadedImageMap[nameUnique];
+				let imageAlreadyLoaded = Vertifier.loadedImageMap[nameUnique];
 				if(imageAlreadyLoaded){
 					console.log('file.alreadyLoaded', name);
 					state.image = nameUnique;
@@ -115,7 +116,7 @@
 						let image = new Image();
 						image.onload = function(){
 							console.log('img.loaded', name);
-							loadedImageMap[nameUnique] = image;
+							Vertifier.loadedImageMap[nameUnique] = image;
 							state.imageList.push({
 								text: name,
 								value: nameUnique
