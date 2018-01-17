@@ -45,6 +45,9 @@ export let buttonMixin = {
 		},
 		displayLabel: function () {
 			return this.label
+		},
+		iconName: function () {
+			return null
 		}
 	},
 	methods: {

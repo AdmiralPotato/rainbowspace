@@ -2,7 +2,7 @@
 	<div class="card settings">
 		<div class="card-header">Settings</div>
 		<div class="card-body">
-			<existingDomNode class="dataCanvasHolder" :content="dataCanvas"></existingDomNode>
+			<existingDomNode class="dataCanvasHolder" :content="dataCanvas" />
 			<form encType="multipart/form-data">
 					<div class="form-group no-gutters">
 						<input-select
@@ -10,7 +10,7 @@
 							:list="settings.imageList"
 							:value="settings.image"
 							destinationAddress="image"
-						></input-select>
+						/>
 						<button
 							type="button"
 							class="btn btn-primary col-12"
@@ -34,12 +34,12 @@
 							:list="settings.displayMethodList"
 							:value="settings.displayMethod"
 							destinationAddress="displayMethod"
-						></input-select>
+						/>
 						<input-toggle
 							class="col-12"
 							label="Show Bounds"
 							destinationAddress="showBounds"
-						></input-toggle>
+						/>
 					</div>
 					<hr />
 					<div class="form-group no-gutters">
@@ -49,7 +49,7 @@
 							:list="settings.cameraModeList"
 							:value="settings.cameraMode"
 							destinationAddress="cameraMode"
-						></input-select>
+						/>
 						<div class="form-group no-gutters col-12">
 							<label>Automatic Rotation</label>
 							<div role="group">
@@ -57,11 +57,11 @@
 									class="col-6"
 									label="SpinY"
 									destinationAddress="autoRotateY"
-								></input-toggle><input-toggle
+								/><input-toggle
 								class="col-6"
 								label="SpinX"
 								destinationAddress="autoRotateX"
-							></input-toggle>
+							/>
 							</div>
 						</div>
 						<div class="form-group no-gutters col-12">
@@ -72,7 +72,8 @@
 									:label="item"
 									destinationAddress="cameraPosition"
 									v-for="item in settings.cameraPositionList"
-								></input-button>
+									:key="item"
+								/>
 							</div>
 						</div>
 						<input-select
@@ -81,7 +82,7 @@
 							:value="settings.backgroundColor"
 							:list="settings.backgroundColorList"
 							destinationAddress="backgroundColor"
-						></input-select>
+						/>
 					</div>
 			</form>
 			<div>

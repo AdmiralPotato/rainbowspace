@@ -5,40 +5,43 @@
 				 :class="{'col-sm-8 col-xl-9': showSidebar}"
 				 :style="{'backgroundColor': 'hsl(0, 0%, ' + settings.backgroundColor + '%)'}"
 			>
-				<viewport :dataCanvas="dataCanvas"></viewport>
+				<viewport :dataCanvas="dataCanvas" />
 			</div>
 			<div
-				class=""
 				:class="{'sidebar h-100 col-12 col-sm-4 col-xl-3': showSidebar}"
 			>
-				<div class="settingsToggle"><a
-					class="icon fa"
-					:class="showSidebar ? 'fa-times' : 'fa-sliders'"
-					@click="settingsToggle"
-				></a></div>
+				<div class="settingsToggle">
+					<a @click="settingsToggle">
+						<icon :name="showSidebar ? 'times' : 'sliders'" />
+					</a>
+				</div>
 				<settings
 					v-if="showSidebar"
 					:settings="settings"
 					:dataCanvas="dataCanvas"
-				></settings>
+				/>
 			</div>
 		</div>
 	</div>
 </template>
 <script>
-	import Vue from 'vue'
 	import state from './state'
 	import Viewport from './viewport.vue'
 	import Settings from './settings'
+	import Icon from 'vue-awesome/components/Icon'
+	import 'vue-awesome/icons/times'
+	import 'vue-awesome/icons/sliders'
 	import { resizeWindowEventHandler } from './viewport.js'
 
+	console.log('app:Icon', Icon)
 
 	let dataCanvas = document.createElement('canvas');
 	dataCanvas.className = 'dataCanvas';
 	export default {
 		components: {
 			Viewport,
-			Settings
+			Settings,
+			Icon
 		},
 		data: function(){
 			return {
@@ -80,6 +83,5 @@
 		}
 	}
 </script>
-<style src="font-awesome/css/font-awesome.css"></style>
 <style src="bootstrap/dist/css/bootstrap.css"></style>
 <style src="./styles.css"></style>

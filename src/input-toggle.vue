@@ -1,13 +1,12 @@
 <script>
 	import state from './state';
 	import InputButton from './input-button';
+	import 'vue-awesome/icons/check-square-o'
+	import 'vue-awesome/icons/square-o'
 	export default {
 		mixins: [InputButton],
 		computed: {
-			displayLabel: function () {
-				let check = this.active() ? 'fa-check-square-o' : 'fa-square-o ';
-				return `<i class="fa ${check}" aria-hidden="true"></i> ${this.label}`;
-			}
+			iconName: function () { return this.active() ? 'check-square-o' : 'square-o'; }
 		},
 		methods: {
 			active: function () {

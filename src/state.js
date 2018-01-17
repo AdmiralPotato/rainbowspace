@@ -28,7 +28,7 @@ export default {
 		{text: 'InterSphere', value: 'https://crossorigin.me/http://nuclearpixel.com/js/npos3d/tests/img/intersphere.png'},
 		{text: 'hsl?', value: 'https://crossorigin.me/http://codropspz.tympanus.netdna-cdn.com/codrops/wp-content/uploads/2015/01/hsl-color-wheel.png'},
 	],
-	displayMethod: 'hslSphere',
+	displayMethod: 'hslCones',
 	displayMethodList: ['rgbCube', 'hslSphere', 'hslCones', 'hslCylinder', 'hslCube', 'hsvSphere', 'hsvCone', 'hsvCylinder', 'hsvCube'],
 	cameraMode: 'perspective',
 	cameraModeList: ['perspective', 'orthographic'],

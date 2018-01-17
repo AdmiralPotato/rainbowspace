@@ -2,11 +2,11 @@
   "name": "rainbowspace",
   "version": "1.0.1",
   "description": "A tool for inspecting the color gamut of 2D images in 3D space.",
-  "main": "public/index.html",
+  "main": "dist/index.html",
   "scripts": {
-    "dev": "vue build --config vue-config.js -o",
-    "build": "vue build --config vue-config.js --prod",
-    "deploy": "push-dir --dir=public --branch=gh-pages --cleanup"
+    "dev": "poi -o",
+    "build": "poi build",
+    "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup"
   },
   "repository": {
     "type": "git",
@@ -27,10 +27,10 @@
   "homepage": "https://github.com/AdmiralPotato/rainbowspace#readme",
   "dependencies": {
     "bootstrap": "4.0.0-beta",
-    "font-awesome": "^4.7.0",
+    "poi": "^9.6.12",
     "three": "0.82.1",
     "vue": "^2.4.2",
-    "vue-cli": "^2.8.2"
+    "vue-awesome": "^2.3.4"
   },
   "devDependencies": {
     "push-dir": "^0.4.1"
