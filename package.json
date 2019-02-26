@@ -1,12 +1,13 @@
 {
   "name": "rainbowspace",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "A tool for inspecting the color gamut of 2D images in 3D space.",
   "main": "public/index.html",
   "scripts": {
-    "dev": "vue build --config vue-config.js -o",
-    "build": "vue build --config vue-config.js --prod",
-    "deploy": "push-dir --dir=public --branch=gh-pages --cleanup"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup"
   },
   "repository": {
     "type": "git",
@@ -26,13 +27,26 @@
   },
   "homepage": "https://github.com/AdmiralPotato/rainbowspace#readme",
   "dependencies": {
-    "bootstrap": "4.0.0-beta",
-    "font-awesome": "^4.7.0",
-    "three": "0.82.1",
-    "vue": "^2.4.2",
-    "vue-cli": "^2.8.2"
+    "@tweenjs/tween.js": "^17.3.0",
+    "material-design-icons-iconfont": "^4.0.5",
+    "three": "^0.102.1",
+    "vue": "^2.6.8",
+    "vue-router": "^3.0.2",
+    "vuetify": "^1.5.5",
+    "vuex": "^3.1.0"
   },
   "devDependencies": {
-    "push-dir": "^0.4.1"
+    "@vue/cli-plugin-babel": "^3.5.0",
+    "@vue/cli-plugin-eslint": "^3.5.0",
+    "@vue/cli-service": "^3.5.0",
+    "@vue/eslint-config-standard": "^4.0.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.15.1",
+    "eslint-plugin-vue": "^5.2.2",
+    "fibers": "^3.1.1",
+    "push-dir": "^0.4.1",
+    "sass": "^1.17.2",
+    "sass-loader": "^7.1.0",
+    "vue-template-compiler": "^2.6.8"
   }
 }
