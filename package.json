@@ -30,7 +30,7 @@
     "font-awesome": "^4.7.0",
     "three": "0.82.1",
     "vue": "^2.4.2",
-    "vue-cli": "^2.8.2"
+    "vue-cli": "2.8.2"
   },
   "devDependencies": {
     "push-dir": "^0.4.1"
